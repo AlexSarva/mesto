@@ -1,0 +1,6 @@
+.profile__item {
+  width: 75%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}

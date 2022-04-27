@@ -1,0 +1,7 @@
+.profile__occupation {
+  margin: 0;
+  padding: 0;
+  grid-area: occupation;
+  color: #fff;
+  outline: 1px solid blue;
+}
