@@ -6,3 +6,11 @@
   font-size: 18px;
   /*line-height: ;*/
 }
+
+@media screen and (max-width: 940px){
+  .profile__occupation{
+    font-size: 14px;
+    align-self: center;
+    justify-self: center;
+  }
+}
