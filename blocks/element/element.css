@@ -1,0 +1,7 @@
+.element {
+  height: 360px;
+  background-color: #fff;
+  display: grid;
+  grid-template-rows: 80% 20%;
+  grid-template-columns: 1fr;
+}

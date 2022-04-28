@@ -3,5 +3,6 @@
   padding: 0;
   grid-area: occupation;
   color: #fff;
-  outline: 1px solid blue;
+  font-size: 18px;
+  /*line-height: ;*/
 }
