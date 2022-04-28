@@ -8,6 +8,19 @@
   <title>Проект: Место</title>
 </head>
 <body class="page">
+  <div class="popup">
+    <div class="popup__container">
+      <button class="popup__close-btn button button_type_active"></button>
+      <a class="popup__title">Редактировать профиль</a>
+      <label class="popup__label" for="profile-name"></label>
+      <input type="text" class="popup__item" id="profile-name" name="profile-name" placeholder="Имя Фамилия" required>
+      <div class="popup__line"></div>
+      <label class="popup__label" for="profile-occupation"></label>
+      <input type="text" class="popup__item" id="profile-occupation" name="profile-occupation" placeholder="Род деятельности" required>
+      <div class="popup__line"></div>
+      <button class="popup__save-btn button button_type_active">Сохранить</button>
+    </div>
+  </div>
   <header class="header">
     <div class="header__logo"></div>
     <div class="header__line"></div>
