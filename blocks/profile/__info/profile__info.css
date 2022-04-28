@@ -12,3 +12,14 @@
     "name button"
     "occupation occupation";
 }
+
+@media screen and (max-width: 940px){
+  .profile__info{
+    width: 100%;
+    margin: 26px auto 0;
+    column-gap: 14px;
+    row-gap: 10px;
+    justify-content: center;
+    align-content: center;
+  }
+}

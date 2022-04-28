@@ -9,8 +9,15 @@
   height: 24px;
   background-color: #000;
   background-image: url(../../../images/edit-btn.svg);
-  /*background-size: contain;*/
   background-repeat: no-repeat;
   background-position: center center;
   box-sizing: border-box;
+}
+
+@media screen and (max-width: 940px){
+  .profile__edit-btn{
+    margin: 0;
+    align-self: center;
+    justify-self: center;
+  }
 }

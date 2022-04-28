@@ -4,4 +4,7 @@
   display: grid;
   grid-template-rows: 80% 20%;
   grid-template-columns: 1fr;
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 1px solid #000;
 }

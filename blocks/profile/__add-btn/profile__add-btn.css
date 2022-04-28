@@ -8,3 +8,9 @@
   background-position: center center;
   box-sizing: border-box;
 }
+
+@media screen and (max-width: 940px){
+  .profile__add-btn{
+    margin-top: 36px;
+  }
+}
