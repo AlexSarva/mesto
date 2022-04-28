@@ -1,0 +1,8 @@
+.footer {
+  width: 70%;
+  padding: 0;
+  margin: 66px auto 60px;
+  display: flex;
+  color: #545454;
+  font-size: 18px;
+}
