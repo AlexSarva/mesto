@@ -1,5 +1,5 @@
 .profile__item {
-  width: 75%;
+  width: 80%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -9,6 +9,7 @@
 @media screen and (max-width: 940px){
   .profile__item{
     width: 100%;
+    max-width: 100%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
