@@ -1,9 +1,8 @@
 .profile__edit-btn {
   border: 1px solid #fff;
-  grid-area: button;
   align-self: end;
-  justify-self: end;
-  margin: 0 0 9px 0;
+  justify-self: start;
+  margin: 0;
   padding: 0;
   width: 24px;
   height: 24px;
@@ -12,11 +11,17 @@
   background-repeat: no-repeat;
   background-position: center center;
   box-sizing: border-box;
+  position: absolute;
+  top: 15px;
+  right: -42px;
+  z-index: 1;
 }
 
 @media screen and (max-width: 940px){
   .profile__edit-btn{
     margin: 0;
+    top: 3px;
+    right: -25px;
     align-self: center;
     justify-self: center;
   }

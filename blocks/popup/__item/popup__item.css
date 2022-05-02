@@ -1,18 +1,13 @@
 .popup__item {
   border: 0;
   width: 80%;
-  height: 16px;
+  height: 18px;
   box-sizing: border-box;
-  /*border-bottom: 1px solid #bcbcc4;*/
   background-color: transparent;
   margin-top: 30px;
   font-size: 14px;
   line-height: 1;
   font-family: inherit;
-}
-
-.popup__item:first-of-type {
-  margin-top: 52px;
 }
 
 .popup__item:focus {
@@ -43,7 +38,9 @@
   .popup__item {
     width: 85%;
   }
+}
 
+@media screen and (max-width: 940px) {
   .popup__item:first-of-type {
     margin-top: 75px;
   }

@@ -4,9 +4,9 @@
   height: 19px;
   margin: 0 0 0 10px;
   padding: 0;
-  background-image: url(../../../images/like-btn.svg);
-  background-repeat: no-repeat;
-  background-position: center center;
+  /*background-image: url(../../../images/like-btn.svg);*/
+  /*background-repeat: no-repeat;*/
+  /*background-position: center center;*/
   box-sizing: border-box;
   background-color: #fff;
 }
