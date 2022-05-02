@@ -1,0 +1,12 @@
+.element {
+  height: 360px;
+  background-color: #fff;
+  display: grid;
+  grid-template-rows: 80% 20%;
+  grid-template-columns: 1fr;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 1px solid #000;
+}
