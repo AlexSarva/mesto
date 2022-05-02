@@ -11,6 +11,8 @@
   top: -40px;
   right: -40px;
   z-index: 4;
+  color: transparent;
+  line-height: 1;
 }
 
 @media screen and (max-width: 940px) {
