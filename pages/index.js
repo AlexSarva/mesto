@@ -14,37 +14,33 @@ const existName = qs('.profile__name'); // Имя в профиле
 const existJob = qs('.profile__occupation'); // Работа в профиле
 
 
-function togglePopup (popupObject) {
+function togglePopup(popupObject) {
     popupObject.classList.toggle('popup_opened');
 }
 
-editBtn.addEventListener('click', function (evt) {
+function editProfile(evt) {
     console.log('editBtn');
     evt.preventDefault();
     togglePopup(formElement);
     nameInput.value = existName.textContent;
     jobInput.value = existJob.textContent;
-});
+}
 
-formElement.addEventListener('click', (evt) => {
-    console.log('closeOverlay');
-    console.log(evt);
-    if (evt.target === evt.currentTarget) {
-        togglePopup(formElement);
-    }
-});
-
-formElement.addEventListener('submit', (evt) => {
+function saveProfile(evt) {
     console.log('saveBtn');
     evt.preventDefault();
     console.log(nameInput.value, jobInput.value);
     existName.textContent = nameInput.value;
     existJob.textContent = jobInput.value;
     togglePopup(formElement);
-});
+}
 
-closeBtn.addEventListener('click', function (evt) {
+function closePopup(evt) {
     console.log('closeBtn');
     console.log(evt);
     togglePopup(formElement);
-});
+}
+
+editBtn.addEventListener('click', editProfile);
+formElement.addEventListener('submit', saveProfile);
+closeBtn.addEventListener('click', closePopup);

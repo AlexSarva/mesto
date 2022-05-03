@@ -3,10 +3,6 @@
   cursor: pointer;
 }
 
-/*.button_type_active:active {*/
-/*  opacity: .5;*/
-/*}*/
-
 .button_type_active:hover {
   opacity: .5;
 }

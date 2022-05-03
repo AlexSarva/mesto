@@ -1,18 +1,21 @@
 .profile__info {
   margin: 0 0 0 30px;
   padding: 0;
-  display: flex;
-  max-width: calc(100% - 220px);
-  flex-direction: column;
-  position: relative;
+  max-width: calc(100% - 200px);
+  display: grid;
+  grid-template-columns: 1fr fit-content(24px);
+  column-gap: 18px;
+  row-gap: 16px;
+  grid-template-areas:
+     "name btn"
+     "occupation occupation";
 }
 
-@media screen and (max-width: 940px){
-  .profile__info{
-    max-width: calc(100% - 100px);
-    margin: 26px auto 0;
-    justify-content: center;
-    align-content: center;
-    /*overflow: hidden;*/
+@media screen and (max-width: 940px) {
+  .profile__info {
+    margin: 26px 0 0 0;
+    max-width: 100%;
+    column-gap: 10px;
+    row-gap: 14px;
   }
 }
