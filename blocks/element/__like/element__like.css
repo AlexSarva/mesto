@@ -9,4 +9,6 @@
   background-position: center center;
   box-sizing: border-box;
   background-color: #fff;
+  color: transparent;
+  line-height: 1;
 }
