@@ -18,7 +18,7 @@ function togglePopup(popupObject) {
     popupObject.classList.toggle('popup_opened');
 }
 
-function editProfile (evt) {
+function editProfile(evt) {
     console.log('editBtn');
     evt.preventDefault();
     togglePopup(formElement);
@@ -26,7 +26,7 @@ function editProfile (evt) {
     jobInput.value = existJob.textContent;
 }
 
-function saveProfile (evt) {
+function saveProfile(evt) {
     console.log('saveBtn');
     evt.preventDefault();
     console.log(nameInput.value, jobInput.value);
@@ -35,7 +35,7 @@ function saveProfile (evt) {
     togglePopup(formElement);
 }
 
-function closePopup (evt) {
+function closePopup(evt) {
     console.log('closeBtn');
     console.log(evt);
     togglePopup(formElement);
