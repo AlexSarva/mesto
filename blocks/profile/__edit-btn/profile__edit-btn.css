@@ -10,7 +10,6 @@
   background-color: #000;
   box-sizing: border-box;
   color: transparent;
-  z-index: 2;
 }
 
 .profile__edit-btn:hover {
@@ -26,5 +25,6 @@
     height: 18px;
     margin: 0;
     align-self: center;
+    z-index: 2;
   }
 }
