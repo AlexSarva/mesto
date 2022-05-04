@@ -6,8 +6,10 @@
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 940px) {
+@media screen and (max-width: 350px) {
   .header__logo {
-    margin: 0 0 0 30px;
+    width: 103px;
+    height: 24px;
+    margin: 0 0 0 28px;
   }
 }

@@ -10,5 +10,8 @@
   box-sizing: border-box;
   background-color: #fff;
   color: transparent;
-  line-height: 1;
+}
+
+.element__like:hover {
+  opacity: .5;
 }

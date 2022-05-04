@@ -1,8 +1,7 @@
 .element {
-  height: 360px;
   background-color: #fff;
   display: grid;
-  grid-template-rows: 80% 20%;
+  grid-template-rows: 281px 79px;
   grid-template-columns: 1fr;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
