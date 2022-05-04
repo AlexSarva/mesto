@@ -8,17 +8,22 @@
   height: 24px;
   border: 1px solid #fff;
   background-color: #000;
-  background-image: url(../../../images/edit-btn.svg);
-  background-repeat: no-repeat;
-  background-position: center center;
   box-sizing: border-box;
   color: transparent;
-  line-height: 1;
   z-index: 2;
+}
+
+.profile__edit-btn:hover {
+  opacity: .6;
 }
 
 @media screen and (max-width: 940px) {
   .profile__edit-btn {
+    position: absolute;
+    top: 7px;
+    right: -28px;
+    width: 18px;
+    height: 18px;
     margin: 0;
     align-self: center;
   }
