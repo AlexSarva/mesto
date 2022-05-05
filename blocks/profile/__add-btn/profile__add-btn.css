@@ -9,6 +9,10 @@
   box-sizing: border-box;
   color: transparent;
   border-radius: 2px;
+  background-image: url(../../../images/add-btn.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 22px 22px;
 }
 
 .profile__add-btn:hover {
@@ -20,5 +24,6 @@
     width: 100%;
     max-width: 100%;
     margin-top: 34px;
+    background-size: 16px 16px;
   }
 }

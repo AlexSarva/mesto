@@ -8,7 +8,6 @@ const jobInput = qs('.popup__field_type_job'); // Поле ввода работ
 
 const editBtn = qs('.profile__edit-btn'); // Кнопка редактирования профиля
 const closeBtn = qs('.popup__close-btn'); // Кнопка закрытия попапа
-const saveBtn = qs('.popup__save-btn'); // Кнопка сохранения попапа
 
 const profileName = qs('.profile__name'); // Имя в профиле
 const profileJob = qs('.profile__occupation'); // Работа в профиле

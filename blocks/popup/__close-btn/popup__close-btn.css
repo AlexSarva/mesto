@@ -23,8 +23,7 @@
   .popup__close-btn {
     width: 20px;
     height: 20px;
-    background-image: url(../../../images/close-btn.svg);
-    right: 0;
-    top: -35px;
+    right: -1px;
+    top: -37px;
   }
 }
