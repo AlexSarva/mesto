@@ -1,4 +1,5 @@
 .element {
+  /*min-height: 361px; !*Если не указать, при открытии с мобильного устройства карточки обрезаются*!*/
   background-color: #fff;
   display: grid;
   grid-template-rows: 282px 79px;
