@@ -4,6 +4,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(282px, 1fr));
+  grid-auto-rows: 361px;
   grid-auto-flow: row dense;
   row-gap: 20px;
   column-gap: 17px;
