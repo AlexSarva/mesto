@@ -13,6 +13,7 @@ const profileName = qs('.profile__name'); // Имя в профиле
 const profileJob = qs('.profile__occupation'); // Работа в профиле
 
 
+// Открытие закрытие попапа редактирование профиля
 function togglePopup(popupObject) {
     popupObject.classList.toggle('popup_opened');
 }
@@ -37,3 +38,52 @@ function closePopup() {
 editBtn.addEventListener('click', editProfile);
 formElement.addEventListener('submit', saveProfile);
 closeBtn.addEventListener('click', closePopup);
+
+const initialCards = [
+    {
+        name: 'Карачаевск',
+        link: 'images/element-karachaevsk.jpg'
+    },
+    {
+        name: 'Эльбрус',
+        link: 'images/element-elbrus.jpg'
+    },
+    {
+        name: 'Домбай',
+        link: 'images/element-dombai.jpg'
+    },
+    {
+        name: 'Алтай',
+        link: 'images/element-altai.jpg'
+    },
+    {
+        name: 'Карелия',
+        link: 'images/element-kareliya.jpg'
+    },
+    {
+        name: 'Владивосток',
+        link: 'images/element-vladivostok.jpg'
+    }
+];
+
+const elementTemplate = document.querySelector('#card').content;
+const elements = document.querySelector('.elements');
+
+const createNewElement = (name, link) => {
+    const newElement = elementTemplate.querySelector('.element').cloneNode(true);
+    newElement.querySelector('.element__title').textContent = name;
+    const img = newElement.querySelector('.element__image');
+    img.src = link;
+    img.alt = name;
+    elements.append(newElement);
+    console.log(newElement);
+};
+
+initialCards.forEach(({name, link}) => {
+    createNewElement(name, link);
+});
+
+
+
+
+
