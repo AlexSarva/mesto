@@ -39,6 +39,7 @@ editBtn.addEventListener('click', editProfile);
 formElement.addEventListener('submit', saveProfile);
 closeBtn.addEventListener('click', closePopup);
 
+// Карточки по умолчанию.
 const initialCards = [
     {
         name: 'Карачаевск',
@@ -83,6 +84,15 @@ initialCards.forEach(({name, link}) => {
     createNewElement(name, link);
 });
 
+
+// Лайки
+elements.addEventListener('click', (evt) => {
+   if (evt.target.classList.contains('element__like')) {
+       const like = evt.target;
+       like.classList.toggle('element__like_active');
+       console.log(like);
+   }
+})
 
 
 
