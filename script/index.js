@@ -85,12 +85,16 @@ initialCards.forEach(({name, link}) => {
 });
 
 
-// Лайки
+// Лайки и удаление
 elements.addEventListener('click', (evt) => {
    if (evt.target.classList.contains('element__like')) {
        const like = evt.target;
        like.classList.toggle('element__like_active');
        console.log(like);
+   }
+   else if (evt.target.classList.contains('element__delete')) {
+       const mainElement = evt.target.parentElement;
+       mainElement.remove();
    }
 })
 
