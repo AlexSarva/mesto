@@ -1,7 +1,8 @@
 const qs = (selector) => document.querySelector(selector);
 
+const body = qs('body');
+
 const addBtn = qs('.profile__add-btn'); // Кнопка добавление карточки
-console.log(addBtn);
 const editBtn = qs('.profile__edit-btn'); // Кнопка редактирования профиля
 const closeBtn = qs('.popup__close-btn'); // Кнопка закрытия попапа
 
@@ -55,7 +56,6 @@ const createNewElement = (name, link) => {
     img.src = link;
     img.alt = name;
     elements.prepend(newElement);
-    console.log(newElement);
 };
 
 initialCards.forEach(({name, link}) => {
@@ -67,7 +67,6 @@ elements.addEventListener('click', (evt) => {
    if (evt.target.classList.contains('element__like')) {
        const like = evt.target;
        like.classList.toggle('element__like_active');
-       console.log(like);
    }
    else if (evt.target.classList.contains('element__delete')) {
        const mainElement = evt.target.parentElement;
@@ -75,64 +74,60 @@ elements.addEventListener('click', (evt) => {
    }
 })
 
+// Popup
+const popup = qs('#popup').content;
 // для Добавления Карточек
 addBtn.addEventListener('click', () => {
-    const curPopup = qs('.popup');
+    const curPopup = popup.querySelector('.popup').cloneNode(true);
     const title = curPopup.querySelector('.popup__title');
     title.textContent = 'Новое место'
     
     const inputName = curPopup.querySelector('#name');
-    console.log(inputName);
     inputName.placeholder = 'Название';
-    inputName.value = '';
     const inputSource= curPopup.querySelector('#source');
     inputSource.placeholder = 'Ссылка на картинку';
-    inputSource.value = '';
-
-    addPopup(curPopup);
 
     const closeBtn = curPopup.querySelector('#closeBtn');
     closeBtn.addEventListener('click', () => {
-        removePopup(curPopup);
+        curPopup.remove();
     })
 
     curPopup.addEventListener('submit', (evt) => {
         evt.preventDefault();
-        console.log(inputName.value, inputSource.value);
         createNewElement(inputName.value, inputSource.value);
-        removePopup(curPopup);
+        curPopup.remove();
     })
+
+    body.append(curPopup);
     
 })
 
 // Для редактирования профиля
 editBtn.addEventListener('click', () => {
-    const curPopup = qs('.popup');
+    const curPopup = popup.querySelector('.popup').cloneNode(true);
     const title = curPopup.querySelector('.popup__title');
     title.textContent = 'Редактировать профиль'
 
     const inputName = curPopup.querySelector('#name');
-    console.log(inputName);
     inputName.placeholder = 'Имя';
     inputName.value = profileName.textContent;
     const inputSource= curPopup.querySelector('#source');
     inputSource.placeholder = 'О себе';
     inputSource.value = profileJob.textContent;
 
-    addPopup(curPopup);
-
     const closeBtn = curPopup.querySelector('#closeBtn');
     closeBtn.addEventListener('click', () => {
-        removePopup(curPopup);
+        curPopup.remove();
     })
 
     curPopup.addEventListener('submit', (evt) => {
         evt.preventDefault();
         profileName.textContent = inputName.value;
         profileJob.textContent = inputSource.value;
-        removePopup(curPopup);
+        curPopup.remove();
     })
 
+    body.append(curPopup);
 })
 
 

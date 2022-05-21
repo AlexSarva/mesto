@@ -10,4 +10,5 @@
   overflow: hidden;
   outline: 1px solid #000;
   position: relative;
+  opacity: 0;
 }
