@@ -1,11 +1,7 @@
 const qs = (selector) => document.querySelector(selector);
 
-const formElement = qs('.popup'); // форма
-
-const nameInput = qs('.popup__field_type_name'); // Поле ввода имени
-const jobInput = qs('.popup__field_type_job'); // Поле ввода работы
-
-
+const addBtn = qs('.profile__add-btn'); // Кнопка добавление карточки
+console.log(addBtn);
 const editBtn = qs('.profile__edit-btn'); // Кнопка редактирования профиля
 const closeBtn = qs('.popup__close-btn'); // Кнопка закрытия попапа
 
@@ -13,33 +9,15 @@ const profileName = qs('.profile__name'); // Имя в профиле
 const profileJob = qs('.profile__occupation'); // Работа в профиле
 
 
-// Открытие закрытие попапа редактирование профиля
-function togglePopup(popupObject) {
-    popupObject.classList.toggle('popup_opened');
+// Открытие закрытие попапа
+function addPopup(popupObject) {
+    popupObject.classList.add('popup_opened');
 }
 
-function editProfile() {
-    nameInput.value = profileName.textContent;
-    jobInput.value = profileJob.textContent;
-    togglePopup(formElement);
+function removePopup(popupObject) {
+    popupObject.classList.remove('popup_opened');
 }
 
-function saveProfile(evt) {
-    evt.preventDefault();
-    profileName.textContent = nameInput.value;
-    profileJob.textContent = jobInput.value;
-    togglePopup(formElement);
-}
-
-function closePopup() {
-    togglePopup(formElement);
-}
-
-editBtn.addEventListener('click', editProfile);
-formElement.addEventListener('submit', saveProfile);
-closeBtn.addEventListener('click', closePopup);
-
-// Карточки по умолчанию.
 const initialCards = [
     {
         name: 'Карачаевск',
@@ -67,8 +45,8 @@ const initialCards = [
     }
 ];
 
-const elementTemplate = document.querySelector('#card').content;
-const elements = document.querySelector('.elements');
+const elementTemplate = qs('#card').content;
+const elements = qs('.elements');
 
 const createNewElement = (name, link) => {
     const newElement = elementTemplate.querySelector('.element').cloneNode(true);
@@ -76,14 +54,13 @@ const createNewElement = (name, link) => {
     const img = newElement.querySelector('.element__image');
     img.src = link;
     img.alt = name;
-    elements.append(newElement);
+    elements.prepend(newElement);
     console.log(newElement);
 };
 
 initialCards.forEach(({name, link}) => {
     createNewElement(name, link);
 });
-
 
 // Лайки и удаление
 elements.addEventListener('click', (evt) => {
@@ -98,6 +75,65 @@ elements.addEventListener('click', (evt) => {
    }
 })
 
+// для Добавления Карточек
+addBtn.addEventListener('click', () => {
+    const curPopup = qs('.popup');
+    const title = curPopup.querySelector('.popup__title');
+    title.textContent = 'Новое место'
+    
+    const inputName = curPopup.querySelector('#name');
+    console.log(inputName);
+    inputName.placeholder = 'Название';
+    inputName.value = '';
+    const inputSource= curPopup.querySelector('#source');
+    inputSource.placeholder = 'Ссылка на картинку';
+    inputSource.value = '';
+
+    addPopup(curPopup);
+
+    const closeBtn = curPopup.querySelector('#closeBtn');
+    closeBtn.addEventListener('click', () => {
+        removePopup(curPopup);
+    })
+
+    curPopup.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        console.log(inputName.value, inputSource.value);
+        createNewElement(inputName.value, inputSource.value);
+        removePopup(curPopup);
+    })
+    
+})
+
+// Для редактирования профиля
+editBtn.addEventListener('click', () => {
+    const curPopup = qs('.popup');
+    const title = curPopup.querySelector('.popup__title');
+    title.textContent = 'Редактировать профиль'
+
+    const inputName = curPopup.querySelector('#name');
+    console.log(inputName);
+    inputName.placeholder = 'Имя';
+    inputName.value = profileName.textContent;
+    const inputSource= curPopup.querySelector('#source');
+    inputSource.placeholder = 'О себе';
+    inputSource.value = profileJob.textContent;
+
+    addPopup(curPopup);
+
+    const closeBtn = curPopup.querySelector('#closeBtn');
+    closeBtn.addEventListener('click', () => {
+        removePopup(curPopup);
+    })
+
+    curPopup.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        profileName.textContent = inputName.value;
+        profileJob.textContent = inputSource.value;
+        removePopup(curPopup);
+    })
+
+})
 
 
 

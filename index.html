@@ -29,16 +29,16 @@
   </footer>
   <div class="popup">
     <div class="popup__container">
-      <button type="button" class="popup__close-btn button" value="Закрыть" name="close-btn"></button>
-      <h3 class="popup__title">Редактировать профиль</h3>
+      <button type="button" class="popup__close-btn button" value="Закрыть" name="close-btn" id="closeBtn"></button>
+      <h3 class="popup__title"></h3>
       <form class="popup__form" name="popup">
-        <input type="text" class="popup__field popup__field_type_name" id="profile-name" placeholder="Имя" required
+        <input type="text" class="popup__field" id="name" placeholder="" required
                name="profile-name">
-        <input type="text" class="popup__field popup__field_type_job" id="profile-occupation" placeholder="О себе"
+        <input type="text" class="popup__field" id="source" placeholder=""
                required
-               name="profile-job">
+               name="profile-source">
         <button type="submit" class="popup__save-btn button" value="Сохранить"
-                name="save-btn">Сохранить
+                name="save-btn" id="saveBtn">Сохранить
         </button>
       </form>
     </div>

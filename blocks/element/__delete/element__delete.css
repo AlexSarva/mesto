@@ -13,7 +13,6 @@
   position: absolute;
   top: 32px;
   right: 28px;
-  z-index: 999;
 }
 
 .element__delete:hover {
