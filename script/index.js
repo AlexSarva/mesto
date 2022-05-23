@@ -68,14 +68,13 @@ initialCards.forEach(({name, link}) => {
 
 // Лайки и удаление
 elements.addEventListener('click', (evt) => {
-   if (evt.target.classList.contains('element__like')) {
-       const like = evt.target;
-       like.classList.toggle('element__like_active');
-   }
-   else if (evt.target.classList.contains('element__delete')) {
-       const mainElement = evt.target.parentElement;
-       fadeRemoveElement(mainElement);
-   }
+    if (evt.target.classList.contains('element__like')) {
+        const like = evt.target;
+        like.classList.toggle('element__like_active');
+    } else if (evt.target.classList.contains('element__delete')) {
+        const mainElement = evt.target.parentElement;
+        fadeRemoveElement(mainElement);
+    }
 })
 
 // Popup
@@ -86,10 +85,10 @@ addBtn.addEventListener('click', () => {
     const curPopup = popup.querySelector('.popup').cloneNode(true);
     const title = curPopup.querySelector('.popup__title');
     title.textContent = 'Новое место'
-    
+
     const inputName = curPopup.querySelector('#name');
     inputName.placeholder = 'Название';
-    const inputSource= curPopup.querySelector('#source');
+    const inputSource = curPopup.querySelector('#source');
     inputSource.placeholder = 'Ссылка на картинку';
 
     const closeBtn = curPopup.querySelector('#closeBtn');
@@ -104,7 +103,7 @@ addBtn.addEventListener('click', () => {
     })
 
     body.append(curPopup);
-    
+
 })
 
 // Для редактирования профиля
@@ -116,7 +115,7 @@ editBtn.addEventListener('click', () => {
     const inputName = curPopup.querySelector('#name');
     inputName.placeholder = 'Имя';
     inputName.value = profileName.textContent;
-    const inputSource= curPopup.querySelector('#source');
+    const inputSource = curPopup.querySelector('#source');
     inputSource.placeholder = 'О себе';
     inputSource.value = profileJob.textContent;
 
@@ -139,11 +138,11 @@ editBtn.addEventListener('click', () => {
 const imagePopup = qs('#image-popup').content;
 
 elements.addEventListener('click', (evt) => {
-    
+
     const curPopup = imagePopup.querySelector('.image-popup').cloneNode(true);
 
     const closeBtn = curPopup.querySelector('#imageCloseBtn');
-    closeBtn.addEventListener('click',() => {
+    closeBtn.addEventListener('click', () => {
         fadeRemoveElement(curPopup);
     })
 
