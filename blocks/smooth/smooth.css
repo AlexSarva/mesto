@@ -1,8 +1,0 @@
-@keyframes ani {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
-}
-
-.smooth {
-  animation: ani .5s forwards;
-}

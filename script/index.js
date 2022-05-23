@@ -9,14 +9,16 @@ const closeBtn = qs('.popup__close-btn'); // Кнопка закрытия по�
 const profileName = qs('.profile__name'); // Имя в профиле
 const profileJob = qs('.profile__occupation'); // Работа в профиле
 
+// Удаление после анимации исчезновения Popup
+document.addEventListener('animationend', function (e) {
+    if (e.animationName === 'fade-out') {
+        e.target.remove();
+    }
+});
 
-// Открытие закрытие попапа
-function addPopup(popupObject) {
-    popupObject.classList.add('popup_opened');
-}
-
-function removePopup(popupObject) {
-    popupObject.classList.remove('popup_opened');
+// Удаление Popup из DOM
+function fadeRemoveElement(popupObject) {
+    popupObject.classList.add('fade_type_out');
 }
 
 const initialCards = [
@@ -49,6 +51,7 @@ const initialCards = [
 const elementTemplate = qs('#card').content;
 const elements = qs('.elements');
 
+// Создаем новый элемент-карточку
 const createNewElement = (name, link) => {
     const newElement = elementTemplate.querySelector('.element').cloneNode(true);
     newElement.querySelector('.element__title').textContent = name;
@@ -58,6 +61,7 @@ const createNewElement = (name, link) => {
     elements.prepend(newElement);
 };
 
+// Создаем начальные карточки и добавляем в DOM
 initialCards.forEach(({name, link}) => {
     createNewElement(name, link);
 });
@@ -70,12 +74,13 @@ elements.addEventListener('click', (evt) => {
    }
    else if (evt.target.classList.contains('element__delete')) {
        const mainElement = evt.target.parentElement;
-       mainElement.remove();
+       fadeRemoveElement(mainElement);
    }
 })
 
 // Popup
 const popup = qs('#popup').content;
+
 // для Добавления Карточек
 addBtn.addEventListener('click', () => {
     const curPopup = popup.querySelector('.popup').cloneNode(true);
@@ -89,13 +94,13 @@ addBtn.addEventListener('click', () => {
 
     const closeBtn = curPopup.querySelector('#closeBtn');
     closeBtn.addEventListener('click', () => {
-        curPopup.remove();
+        fadeRemoveElement(curPopup);
     })
 
     curPopup.addEventListener('submit', (evt) => {
         evt.preventDefault();
         createNewElement(inputName.value, inputSource.value);
-        curPopup.remove();
+        fadeRemoveElement(curPopup);
     })
 
     body.append(curPopup);
@@ -117,18 +122,41 @@ editBtn.addEventListener('click', () => {
 
     const closeBtn = curPopup.querySelector('#closeBtn');
     closeBtn.addEventListener('click', () => {
-        curPopup.remove();
+        fadeRemoveElement(curPopup);
     })
 
     curPopup.addEventListener('submit', (evt) => {
         evt.preventDefault();
         profileName.textContent = inputName.value;
         profileJob.textContent = inputSource.value;
-        curPopup.remove();
+        fadeRemoveElement(curPopup);
     })
 
     body.append(curPopup);
 })
 
+// Картинка
+const imagePopup = qs('#image-popup').content;
 
+elements.addEventListener('click', (evt) => {
+    
+    const curPopup = imagePopup.querySelector('.image-popup').cloneNode(true);
+
+    const closeBtn = curPopup.querySelector('#imageCloseBtn');
+    closeBtn.addEventListener('click',() => {
+        fadeRemoveElement(curPopup);
+    })
+
+    if (evt.target.classList.contains('element__image')) {
+        const curImage = curPopup.querySelector('.image-popup__image');
+        curImage.src = evt.target.src;
+        curImage.alt = evt.target.alt;
+
+        const curText = curPopup.querySelector('.image-popup__text');
+        const element = evt.target.closest('.element');
+        curText.textContent = element.querySelector('.element__title').textContent;
+
+        body.append(curPopup);
+    }
+})
 

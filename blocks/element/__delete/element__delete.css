@@ -11,10 +11,10 @@
   background-color: transparent;
   color: transparent;
   position: absolute;
-  top: 32px;
-  right: 28px;
+  top: 20px;
+  right: 20px;
 }
 
 .element__delete:hover {
-  opacity: .5;
+  opacity: .6;
 }

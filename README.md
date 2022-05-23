@@ -1,4 +1,4 @@
-![version v0.2.1](https://img.shields.io/badge/version-v0.1.2-success)
+![version v0.2.3](https://img.shields.io/badge/version-v0.2.3-success)
 ![unstable](https://img.shields.io/badge/stability-unstable-red)
 ![language](https://img.shields.io/badge/language-HTML%20%2F%20CSS-blue)
 
@@ -24,7 +24,11 @@
     * адаптивность
 * JavaScript
     * Добавлен Popup
-        * Можем изменять информацию в профиле
+      * Можем изменять информацию в профиле
+    * Используем template
+      * Один шаблон для разных задач
+    * Реализована плавность открытия / закрытия окон
+    * Активные лайки
 
 <p align="center">
 <img src="https://blog.theodo.com/c62edd75f2fd2e94c7fa9758db463f0b/debugging-css.gif" alt="">
@@ -34,9 +38,6 @@
 
 * Улучшенная адаптивная верстка
 * Анимация
-* Интерактивность
-    * Добавление новых фото
-    * Лайки
 
 **Ссылка**
 
