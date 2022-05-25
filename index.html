@@ -17,47 +17,64 @@
       <div class="profile__info">
         <h1 class="profile__name">Жак-Ив Кусто</h1>
         <p class="profile__occupation">Исследователь океана</p>
-        <button type="button" class="profile__edit-btn button" value="Изменить" name="edit-btn"></button>
+        <button type="button" class="profile__edit-btn button" value="Изменить" name="edit-btn"
+                id="profileEditBtn"></button>
       </div>
     </div>
-    <button type="button" class="profile__add-btn button" value="Добавить" name="add-btn"></button>
+    <button type="button" class="profile__add-btn button" value="Добавить" name="add-btn" id="cardAddBtn"></button>
   </section>
   <section class="elements"></section>
 </main>
 <footer class="footer">
   <span>&copy; 2020 Mesto Russia</span>
 </footer>
-<template id="popup">
-  <div class="popup fade fade_type_in">
-    <div class="popup__container">
-      <button type="button" class="popup__close-btn button" value="Закрыть" name="close-btn" id="closeBtn"></button>
-      <h3 class="popup__title"></h3>
-      <form class="popup__form" name="popup">
-        <input type="text" class="popup__field" id="name" placeholder="" required
-               name="profile-name">
-        <input type="text" class="popup__field" id="source" placeholder=""
-               required
-               name="profile-source">
-        <button type="submit" class="popup__save-btn button" value="Сохранить"
-                name="save-btn" id="saveBtn">Сохранить
-        </button>
-      </form>
-    </div>
+
+<div class="popup popup_type_profile">
+  <div class="popup__container popup__container_type_form">
+    <button type="button" class="popup__close-btn button" value="Закрыть" name="profile-close-btn"
+            id="profileFormCloseBtn"></button>
+    <h3 class="popup__title">Редактировать профиль</h3>
+    <form class="popup__form" name="popup">
+      <input type="text" class="popup__field" id="profileName" placeholder="Имя" required
+             name="profile-name">
+      <input type="text" class="popup__field" id="profileJob" placeholder="О себе"
+             required
+             name="profile-job">
+      <button type="submit" class="popup__save-btn button" value="Сохранить"
+              name="profile-save-btn" id="profileFormSaveBtn">Сохранить
+      </button>
+    </form>
   </div>
-</template>
-<template id="image-popup">
-  <div class="image-popup fade fade_type_in">
-    <div class="image-popup__container">
-      <img class="image-popup__image" src="http://template" alt="template">
-      <h3 class="image-popup__text"></h3>
-      <button type="button" class="image-popup__close-btn button" value="Закрыть" name="close-btn"
-              id="imageCloseBtn"></button>
-    </div>
+</div>
+<div class="popup popup_type_new-card">
+  <div class="popup__container popup__container_type_form">
+    <button type="button" class="popup__close-btn button" value="Закрыть" name="new-card-close-btn"
+            id="newCardCloseBtn"></button>
+    <h3 class="popup__title">Новое место</h3>
+    <form class="popup__form" name="popup">
+      <input type="text" class="popup__field" id="newCardTitle" placeholder="Название" required
+             name="new-card-title">
+      <input type="text" class="popup__field" id="newCardSource" placeholder="Ссылка на картинку"
+             required
+             name="new-card-source">
+      <button type="submit" class="popup__save-btn button" value="Сохранить"
+              name="new-card-save-btn" id="newCardSaveBtn">Сохранить
+      </button>
+    </form>
   </div>
-</template>
+</div>
+<div class="popup popup_type_image">
+  <div class="popup__container popup__container_type_image">
+    <img class="popup__image" src="images/element-template.png" alt="template">
+    <h3 class="popup__text"></h3>
+    <button type="button" class="popup__close-btn button" value="Закрыть" name="close-btn"
+            id="imageCloseBtn"></button>
+  </div>
+</div>
+
 <template id="card">
   <article class="element fade fade_type_in">
-    <img class="element__image" src="http://template" alt="template">
+    <img class="element__image" src="images/element-template.png" alt="template">
     <div class="element__info">
       <h2 class="element__title"></h2>
       <button type="button" value="Лайк" class="element__like button" name="like-btn"></button>
