@@ -2,6 +2,12 @@ const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
 const imagePopup = document.querySelector('.popup_type_image');
 
+const inputName = profilePopup.querySelector('#profileName');
+const inputJob = profilePopup.querySelector('#profileJob');
+
+const profileName = document.querySelector('.profile__name'); // Имя в профиле
+const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
+
 const openPopup = (popup) => {
     popup.classList.add('popup_opened');
 }
@@ -9,9 +15,6 @@ const openPopup = (popup) => {
 const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
 }
-
-const profileName = document.querySelector('.profile__name'); // Имя в профиле
-const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
 
 
 const initialCards = [
@@ -57,6 +60,34 @@ function fadeRemoveElement(popupObject) {
     popupObject.classList.add('fade_type_out');
 }
 
+// Нажатие лайка
+const pressLike = (elem) => {
+    elem.classList.toggle('element__like_active');
+}
+
+// Удаление карточки
+const deleteCard = (evt) => {
+    const mainElement = evt.target.parentElement;
+    fadeRemoveElement(mainElement);
+}
+
+// Открытие картинки
+const curImage = imagePopup.querySelector('.popup__image');
+const curText = imagePopup.querySelector('.popup__text');
+const openImage = (evt) => {
+    curImage.src = evt.target.src;
+    curImage.alt = evt.target.alt;
+    const element = evt.target.closest('.element');
+    curText.textContent = element.querySelector('.element__title').textContent;
+    openPopup(imagePopup);
+}
+
+// Кнопка закрытия попапа с картинкой
+const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
+imageCloseBtn.addEventListener('click', () => {
+    closePopup(imagePopup);
+})
+
 // Создаем новый элемент-карточку
 const createNewElement = (name, link) => {
     const newElement = cardTemplate.querySelector('.element').cloneNode(true);
@@ -64,17 +95,15 @@ const createNewElement = (name, link) => {
     const img = newElement.querySelector('.element__image');
     img.src = link;
     img.alt = name;
-    newElement.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('element__like')) {
-            const like = evt.target;
-            like.classList.toggle('element__like_active');
-        } else if (evt.target.classList.contains('element__delete')) {
-            const mainElement = evt.target.parentElement;
-            fadeRemoveElement(mainElement);
-        }
-    })
+    const like = newElement.querySelector('.element__like');
+    like.addEventListener('click', () => pressLike(like));
+    const elementDeleteBtn = newElement.querySelector('.element__delete');
+    elementDeleteBtn.addEventListener('click', (evt) => deleteCard(evt));
+    const image = newElement.querySelector('.element__image');
+    image.addEventListener('click', (evt) => openImage(evt));
     return newElement;
 };
+
 // Функция создания и добавления карточки
 renderCard = (title, link) => {
     const newCard = createNewElement(title, link);
@@ -89,8 +118,6 @@ initialCards.forEach(({name, link}) => {
 // Сохранение профиля
 profilePopup.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    const inputName = profilePopup.querySelector('#profileName');
-    const inputJob = profilePopup.querySelector('#profileJob');
     profileName.textContent = inputName.value;
     profileJob.textContent = inputJob.value;
     closePopup(profilePopup);
@@ -98,66 +125,36 @@ profilePopup.addEventListener('submit', (evt) => {
 
 // Кнопка редактирования профиля
 const profileEditBtn = document.querySelector('#profileEditBtn');
-
-// Редактирование профиля
 profileEditBtn.addEventListener('click', () => {
-
-    const inputName = profilePopup.querySelector('#profileName');
     inputName.value = profileName.textContent;
-    const inputJob = profilePopup.querySelector('#profileJob');
     inputJob.value = profileJob.textContent;
-
-    const closeBtn = profilePopup.querySelector('#profileFormCloseBtn');
-    closeBtn.addEventListener('click', () => {
-        closePopup(profilePopup);
-    })
-
     openPopup(profilePopup);
 })
 
+// Кнопка закрытия попапа редактирования профиля
+const profilePopupCloseBtn = profilePopup.querySelector('#profileFormCloseBtn');
+profilePopupCloseBtn.addEventListener('click', () => {
+    closePopup(profilePopup);
+})
 
 // для Добавления Карточек
+const inputTitle = cardPopup.querySelector('#newCardTitle');
+const inputSource = cardPopup.querySelector('#newCardSource');
 cardPopup.addEventListener('submit', (evt) => {
-    const inputTitle = cardPopup.querySelector('#newCardTitle');
-    const inputSource = cardPopup.querySelector('#newCardSource');
     evt.preventDefault();
     renderCard(inputTitle.value, inputSource.value);
+    cardPopup.querySelector('.popup__form').reset();
+    closePopup(cardPopup);
+})
+
+// Кнопка закрытия попапа добавления новой карточки
+const newCardCloseBtn = cardPopup.querySelector('#newCardCloseBtn');
+newCardCloseBtn.addEventListener('click', () => {
     closePopup(cardPopup);
 })
 
 // Добавление новой карточки
 const cardAddBtn = document.querySelector('#cardAddBtn');
 cardAddBtn.addEventListener('click', () => {
-    const inputTitle = cardPopup.querySelector('#newCardTitle');
-    const inputSource = cardPopup.querySelector('#newCardSource');
-    inputTitle.value = '';
-    inputSource.value = '';
-    const newCardCloseBtn = cardPopup.querySelector('#newCardCloseBtn');
-    newCardCloseBtn.addEventListener('click', () => {
-        closePopup(cardPopup);
-    })
-
     openPopup(cardPopup);
 })
-
-// Картинка
-
-cardList.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('element__image')) {
-        const curImage = imagePopup.querySelector('.popup__image');
-        curImage.src = evt.target.src;
-        curImage.alt = evt.target.alt;
-
-        const curText = imagePopup.querySelector('.popup__text');
-        const element = evt.target.closest('.element');
-        curText.textContent = element.querySelector('.element__title').textContent;
-
-        const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
-        imageCloseBtn.addEventListener('click', () => {
-            closePopup(imagePopup);
-        })
-
-        openPopup(imagePopup);
-    }
-})
-
