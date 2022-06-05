@@ -28,7 +28,6 @@ const hasInvalidInput = (inputList) => {
 
 const toggleButtonState = (validateCfg, inputList, buttonElement) => {
     // Если есть хотя бы один невалидный инпут
-    console.log(validateCfg.inactiveButtonClass, buttonElement);
     if (hasInvalidInput(inputList)) {
         // сделай кнопку неактивной
         buttonElement.classList.add(validateCfg.inactiveButtonClass);

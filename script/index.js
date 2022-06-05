@@ -162,3 +162,19 @@ const cardAddBtn = document.querySelector('#cardAddBtn');
 cardAddBtn.addEventListener('click', () => {
     openPopup(cardPopup);
 })
+
+// Закрытие popup нажатием на overlay
+const overlayClosePopup = (popup) => {
+    popup.addEventListener('click', (evt) => {
+        if (evt.target === evt.currentTarget) {
+            closePopup(popup);
+        }
+    })
+}
+
+const popupList = Array.from(document.querySelectorAll('.popup'));
+popupList.forEach((curPopup) => {
+    overlayClosePopup(curPopup);
+})
+
+
