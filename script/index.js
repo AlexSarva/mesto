@@ -2,8 +2,8 @@ const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
 const imagePopup = document.querySelector('.popup_type_image');
 
-const inputName = profilePopup.querySelector('#profileName');
-const inputJob = profilePopup.querySelector('#profileJob');
+const inputName = profilePopup.querySelector('#profile-name');
+const inputJob = profilePopup.querySelector('#profile-job');
 
 const profileName = document.querySelector('.profile__name'); // Имя в профиле
 const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
@@ -129,6 +129,10 @@ profileEditBtn.addEventListener('click', () => {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
     openPopup(profilePopup);
+    // чтобы кнопка сохранить была активна
+    toggleButtonState(validationConfig, [inputName, inputJob],
+        profilePopup.querySelector('.popup__save-btn'));
+
 })
 
 // Кнопка закрытия попапа редактирования профиля
@@ -158,3 +162,27 @@ const cardAddBtn = document.querySelector('#cardAddBtn');
 cardAddBtn.addEventListener('click', () => {
     openPopup(cardPopup);
 })
+
+// Закрытие popup нажатием на overlay
+const overlayClosePopup = (popup) => {
+    popup.addEventListener('click', (evt) => {
+        if (evt.target === evt.currentTarget) {
+            closePopup(popup);
+        }
+    })
+}
+
+const popupList = Array.from(document.querySelectorAll('.popup'));
+popupList.forEach((curPopup) => {
+    overlayClosePopup(curPopup);
+})
+
+// Закрытие popup через Esc
+document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+        popupList.forEach((curPopup) => {
+            closePopup(curPopup);
+        })
+    }
+})
+
