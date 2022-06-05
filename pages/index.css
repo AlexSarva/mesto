@@ -2,14 +2,28 @@
 @import url(../vendor/fonts/inter/inter.css);
 
 @import url(../blocks/popup/popup.css);
-@import url(../blocks/popup/__container/popup__container.css);
-@import url(../blocks/popup/__close-btn/popup__close-btn.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/_type/_image/popup_type_image.css);
+@import url(../blocks/popup/_type/_profile/popup_type_profile.css);
+@import url(../blocks/popup/_type/_new-card/popup_type_new-card.css);
+@import url(../blocks/popup/__container/popup_container.css);
+@import url(../blocks/popup/__container/_type/_image/popup__container_type_image.css);
+@import url(../blocks/popup/__container/_type/_form/popup__container_type_form.css);
 @import url(../blocks/popup/__title/popup__title.css);
-@import url(../blocks/popup/__form/popup__form.css);
-@import url(../blocks/popup/__field/popup__field.css);
+@import url(../blocks/popup/__text/popup__text.css);
 @import url(../blocks/popup/__save-btn/popup__save-btn.css);
+@import url(../blocks/popup/__image/popup__image.css);
+@import url(../blocks/popup/__form/popup__form.css);
+@import url(../blocks/popup/__field-set/popup__field-set.css);
+@import url(../blocks/popup/__label/popup__label.css);
+@import url(../blocks/popup/__field/popup__field.css);
+@import url(../blocks/popup/__field-error/popup__field-error.css);
+@import url(../blocks/popup/__field-error/_active/popup__field-error_active.css);
+@import url(../blocks/popup/__field/_type/_error/popup__field_type_error.css);
+@import url(../blocks/popup/__close-btn/popup__close-btn.css);
 
 @import url(../blocks/button/button.css);
+@import url(../blocks/button/_inactive/button_inactive.css);
 
 @import url(../blocks/page/page.css);
 
@@ -36,12 +50,6 @@
 @import url(../blocks/element/__delete/element__delete.css);
 
 @import url(../blocks/footer/footer.css);
-
-@import url(../blocks/image-popup/image-popup.css);
-@import url(../blocks/image-popup/__container/image-popup__container.css);
-@import url(../blocks/image-popup/__close-btn/image-popup__close-btn.css);
-@import url(../blocks/image-popup/__image/image-popup__image.css);
-@import url(../blocks/image-popup/__text/image-popup__text.css);
 
 @import url(../blocks/fade/_type/_in/fade_type_in.css);
 @import url(../blocks/fade/_type/_out/fade_type_out.css);

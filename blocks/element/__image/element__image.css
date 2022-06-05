@@ -7,3 +7,7 @@
   box-sizing: border-box;
   background-color: #000;
 }
+
+.element__image:hover {
+  cursor: pointer;
+}

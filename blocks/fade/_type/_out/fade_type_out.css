@@ -1,6 +1,6 @@
 .fade_type_out {
-  -webkit-animation: fade-out .5s forwards;
-  animation: fade-out .5s forwards;
+  -webkit-animation: fade-out .7s forwards;
+  animation: fade-out .7s forwards;
 }
 
 @keyframes fade-out {
