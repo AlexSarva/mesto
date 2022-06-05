@@ -129,7 +129,10 @@ profileEditBtn.addEventListener('click', () => {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
     openPopup(profilePopup);
-    enableValidation();
+    // чтобы кнопка сохранить была активна
+    toggleButtonState(validationConfig, [inputName, inputJob],
+        profilePopup.querySelector('.popup__save-btn'));
+
 })
 
 // Кнопка закрытия попапа редактирования профиля
@@ -158,5 +161,4 @@ newCardCloseBtn.addEventListener('click', () => {
 const cardAddBtn = document.querySelector('#cardAddBtn');
 cardAddBtn.addEventListener('click', () => {
     openPopup(cardPopup);
-    enableValidation();
 })
