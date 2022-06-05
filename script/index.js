@@ -1,51 +1,41 @@
 const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
 const imagePopup = document.querySelector('.popup_type_image');
-
 const inputName = profilePopup.querySelector('#profile-name');
 const inputJob = profilePopup.querySelector('#profile-job');
-
 const profileName = document.querySelector('.profile__name'); // Имя в профиле
 const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
+const cardTemplate = document.querySelector('#card').content;
+const cardList = document.querySelector('.elements');
+const curImage = imagePopup.querySelector('.popup__image');
+const curText = imagePopup.querySelector('.popup__text');
+const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
+const profileForm = profilePopup.querySelector('.popup__form');
+const profileEditBtn = document.querySelector('#profileEditBtn');
+const profilePopupCloseBtn = profilePopup.querySelector('#profileFormCloseBtn');
+const inputTitle = cardPopup.querySelector('#newCardTitle');
+const inputSource = cardPopup.querySelector('#newCardSource');
+const cardForm = cardPopup.querySelector('.popup__form');
+const newCardCloseBtn = cardPopup.querySelector('#newCardCloseBtn');
+const cardAddBtn = document.querySelector('#cardAddBtn');
+const popupList = Array.from(document.querySelectorAll('.popup'));
+
+// Закрытие popup через Esc
+const closeByEsc = (evt, popup) => {
+    if (evt.key === 'Escape') {
+        closePopup(popup)
+    }
+}
 
 const openPopup = (popup) => {
     popup.classList.add('popup_opened');
+    document.addEventListener('keydown', (evt) => closeByEsc(evt, popup));
 }
 
 const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
+    document.removeEventListener('keydown', (evt) => closeByEsc(evt, popup));
 }
-
-
-const initialCards = [
-    {
-        name: 'Карачаевск',
-        link: 'images/element-karachaevsk.jpg'
-    },
-    {
-        name: 'Эльбрус',
-        link: 'images/element-elbrus.jpg'
-    },
-    {
-        name: 'Домбай',
-        link: 'images/element-dombai.jpg'
-    },
-    {
-        name: 'Алтай',
-        link: 'images/element-altai.jpg'
-    },
-    {
-        name: 'Карелия',
-        link: 'images/element-kareliya.jpg'
-    },
-    {
-        name: 'Владивосток',
-        link: 'images/element-vladivostok.jpg'
-    }
-];
-
-const cardTemplate = document.querySelector('#card').content;
-const cardList = document.querySelector('.elements');
 
 
 // Плавное удаление карточки из списка
@@ -56,7 +46,7 @@ document.addEventListener('animationend', function (e) {
 });
 
 // Удаление карточки из DOM
-function fadeRemoveElement(popupObject) {
+const fadeRemoveElement = (popupObject) => {
     popupObject.classList.add('fade_type_out');
 }
 
@@ -67,23 +57,19 @@ const pressLike = (elem) => {
 
 // Удаление карточки
 const deleteCard = (evt) => {
-    const mainElement = evt.target.parentElement;
+    const mainElement = evt.target.closest('.element');
     fadeRemoveElement(mainElement);
 }
 
 // Открытие картинки
-const curImage = imagePopup.querySelector('.popup__image');
-const curText = imagePopup.querySelector('.popup__text');
-const openImage = (evt) => {
-    curImage.src = evt.target.src;
-    curImage.alt = evt.target.alt;
-    const element = evt.target.closest('.element');
-    curText.textContent = element.querySelector('.element__title').textContent;
+const openImage = (imageSource, imageName) => {
+    curImage.src = imageSource;
+    curImage.alt = imageName;
+    curText.textContent = imageName;
     openPopup(imagePopup);
 }
 
 // Кнопка закрытия попапа с картинкой
-const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
 imageCloseBtn.addEventListener('click', () => {
     closePopup(imagePopup);
 })
@@ -100,7 +86,7 @@ const createNewElement = (name, link) => {
     const elementDeleteBtn = newElement.querySelector('.element__delete');
     elementDeleteBtn.addEventListener('click', (evt) => deleteCard(evt));
     const image = newElement.querySelector('.element__image');
-    image.addEventListener('click', (evt) => openImage(evt));
+    image.addEventListener('click', () => openImage(link, name));
     return newElement;
 };
 
@@ -116,7 +102,7 @@ initialCards.forEach(({name, link}) => {
 });
 
 // Сохранение профиля
-profilePopup.addEventListener('submit', (evt) => {
+profileForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     profileName.textContent = inputName.value;
     profileJob.textContent = inputJob.value;
@@ -124,7 +110,6 @@ profilePopup.addEventListener('submit', (evt) => {
 })
 
 // Кнопка редактирования профиля
-const profileEditBtn = document.querySelector('#profileEditBtn');
 profileEditBtn.addEventListener('click', () => {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
@@ -136,29 +121,27 @@ profileEditBtn.addEventListener('click', () => {
 })
 
 // Кнопка закрытия попапа редактирования профиля
-const profilePopupCloseBtn = profilePopup.querySelector('#profileFormCloseBtn');
 profilePopupCloseBtn.addEventListener('click', () => {
     closePopup(profilePopup);
 })
 
 // для Добавления Карточек
-const inputTitle = cardPopup.querySelector('#newCardTitle');
-const inputSource = cardPopup.querySelector('#newCardSource');
-cardPopup.addEventListener('submit', (evt) => {
+cardForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     renderCard(inputTitle.value, inputSource.value);
     cardPopup.querySelector('.popup__form').reset();
+    const saveBtn = cardPopup.querySelector('.popup__save-btn');
+    saveBtn.setAttribute('disabled', true);
+    saveBtn.classList.add('popup__save-btn_inactive');
     closePopup(cardPopup);
 })
 
 // Кнопка закрытия попапа добавления новой карточки
-const newCardCloseBtn = cardPopup.querySelector('#newCardCloseBtn');
 newCardCloseBtn.addEventListener('click', () => {
     closePopup(cardPopup);
 })
 
 // Добавление новой карточки
-const cardAddBtn = document.querySelector('#cardAddBtn');
 cardAddBtn.addEventListener('click', () => {
     openPopup(cardPopup);
 })
@@ -172,17 +155,6 @@ const overlayClosePopup = (popup) => {
     })
 }
 
-const popupList = Array.from(document.querySelectorAll('.popup'));
 popupList.forEach((curPopup) => {
     overlayClosePopup(curPopup);
 })
-
-// Закрытие popup через Esc
-document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-        popupList.forEach((curPopup) => {
-            closePopup(curPopup);
-        })
-    }
-})
-
