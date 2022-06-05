@@ -177,4 +177,12 @@ popupList.forEach((curPopup) => {
     overlayClosePopup(curPopup);
 })
 
+// Закрытие popup через Esc
+document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Escape') {
+        popupList.forEach((curPopup) => {
+            closePopup(curPopup);
+        })
+    }
+})
 
