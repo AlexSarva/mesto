@@ -21,20 +21,21 @@ const cardAddBtn = document.querySelector('#cardAddBtn');
 const popupList = Array.from(document.querySelectorAll('.popup'));
 
 // Закрытие popup через Esc
-const closeByEsc = (evt, popup) => {
+const closeByEsc = (evt) => {
     if (evt.key === 'Escape') {
-        closePopup(popup)
+        const openedPopup = document.querySelector('.popup_opened');
+        closePopup(openedPopup)
     }
 }
 
 const openPopup = (popup) => {
     popup.classList.add('popup_opened');
-    document.addEventListener('keydown', (evt) => closeByEsc(evt, popup));
+    document.addEventListener('keydown', closeByEsc);
 }
 
 const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
-    document.removeEventListener('keydown', (evt) => closeByEsc(evt, popup));
+    document.removeEventListener('keydown', closeByEsc);
 }
 
 
@@ -129,7 +130,7 @@ profilePopupCloseBtn.addEventListener('click', () => {
 cardForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     renderCard(inputTitle.value, inputSource.value);
-    cardPopup.querySelector('.popup__form').reset();
+    cardForm.reset();
     const saveBtn = cardPopup.querySelector('.popup__save-btn');
     saveBtn.setAttribute('disabled', true);
     saveBtn.classList.add('popup__save-btn_inactive');
