@@ -24,7 +24,7 @@ const popupList = Array.from(document.querySelectorAll('.popup'));
 const closeByEsc = (evt) => {
     if (evt.key === 'Escape') {
         const openedPopup = document.querySelector('.popup_opened');
-        closePopup(openedPopup)
+        closePopup(openedPopup);
     }
 }
 
