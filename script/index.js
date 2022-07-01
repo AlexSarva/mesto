@@ -1,15 +1,13 @@
+import {Card, initialCards} from "./Card.js";
+import {FormValidator, validationConfig} from "./FormValidator.js";
+
 const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
-const imagePopup = document.querySelector('.popup_type_image');
 const inputName = profilePopup.querySelector('#profile-name');
 const inputJob = profilePopup.querySelector('#profile-job');
 const profileName = document.querySelector('.profile__name'); // Имя в профиле
 const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
-const cardTemplate = document.querySelector('#card').content;
 const cardList = document.querySelector('.elements');
-const curImage = imagePopup.querySelector('.popup__image');
-const curText = imagePopup.querySelector('.popup__text');
-const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
 const profileForm = profilePopup.querySelector('.popup__form');
 const profileEditBtn = document.querySelector('#profileEditBtn');
 const profilePopupCloseBtn = profilePopup.querySelector('#profileFormCloseBtn');
@@ -28,12 +26,12 @@ const closeByEsc = (evt) => {
     }
 }
 
-const openPopup = (popup) => {
+export const openPopup = (popup) => {
     popup.classList.add('popup_opened');
     document.addEventListener('keydown', closeByEsc);
 }
 
-const closePopup = (popup) => {
+export const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
     document.removeEventListener('keydown', closeByEsc);
 }
@@ -46,55 +44,11 @@ document.addEventListener('animationend', function (e) {
     }
 });
 
-// Удаление карточки из DOM
-const fadeRemoveElement = (popupObject) => {
-    popupObject.classList.add('fade_type_out');
-}
-
-// Нажатие лайка
-const pressLike = (elem) => {
-    elem.classList.toggle('element__like_active');
-}
-
-// Удаление карточки
-const deleteCard = (evt) => {
-    const mainElement = evt.target.closest('.element');
-    fadeRemoveElement(mainElement);
-}
-
-// Открытие картинки
-const openImage = (imageSource, imageName) => {
-    curImage.src = imageSource;
-    curImage.alt = imageName;
-    curText.textContent = imageName;
-    openPopup(imagePopup);
-}
-
-// Кнопка закрытия попапа с картинкой
-imageCloseBtn.addEventListener('click', () => {
-    closePopup(imagePopup);
-})
-
-// Создаем новый элемент-карточку
-const createNewElement = (name, link) => {
-    const newElement = cardTemplate.querySelector('.element').cloneNode(true);
-    newElement.querySelector('.element__title').textContent = name;
-    const img = newElement.querySelector('.element__image');
-    img.src = link;
-    img.alt = name;
-    const like = newElement.querySelector('.element__like');
-    like.addEventListener('click', () => pressLike(like));
-    const elementDeleteBtn = newElement.querySelector('.element__delete');
-    elementDeleteBtn.addEventListener('click', (evt) => deleteCard(evt));
-    const image = newElement.querySelector('.element__image');
-    image.addEventListener('click', () => openImage(link, name));
-    return newElement;
-};
-
 // Функция создания и добавления карточки
-renderCard = (title, link) => {
-    const newCard = createNewElement(title, link);
-    cardList.prepend(newCard);
+const renderCard = (name, link) => {
+    const newCard = new Card(name, link, '#card');
+    const cardElement = newCard.generateCard();
+    cardList.prepend(cardElement);
 }
 
 // Создаем начальные карточки и добавляем в DOM
@@ -116,8 +70,8 @@ profileEditBtn.addEventListener('click', () => {
     inputJob.value = profileJob.textContent;
     openPopup(profilePopup);
     // чтобы кнопка сохранить была активна
-    toggleButtonState(validationConfig, [inputName, inputJob],
-        profilePopup.querySelector('.popup__save-btn'));
+    // toggleButtonState(validationConfig, [inputName, inputJob],
+    //     profilePopup.querySelector('.popup__save-btn'));
 
 })
 
@@ -159,3 +113,13 @@ const overlayClosePopup = (popup) => {
 popupList.forEach((curPopup) => {
     overlayClosePopup(curPopup);
 })
+
+// Валидация форм
+const formList = Array.from(document.querySelectorAll('.popup__form'));
+formList.forEach((formElement) => {
+    const fieldsetList = Array.from(formElement.querySelectorAll('.popup__field-set'));
+    fieldsetList.forEach((fieldSet) => {
+        const newValidate = new FormValidator(validationConfig, fieldSet);
+        newValidate.setValidation();
+    });
+});
