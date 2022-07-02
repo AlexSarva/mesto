@@ -1,41 +1,8 @@
-import {openPopup, closePopup} from "./index.js";
+import {openPopup} from "./index.js";
 
 const imagePopup = document.querySelector('.popup_type_image');
 const curImage = imagePopup.querySelector('.popup__image');
 const curText = imagePopup.querySelector('.popup__text');
-const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
-
-// Кнопка закрытия попапа с картинкой
-imageCloseBtn.addEventListener('click', () => {
-    closePopup(imagePopup);
-})
-
-export const initialCards = [
-    {
-        name: 'Карачаевск',
-        link: 'images/element-karachaevsk.jpg'
-    },
-    {
-        name: 'Эльбрус',
-        link: 'images/element-elbrus.jpg'
-    },
-    {
-        name: 'Домбай',
-        link: 'images/element-dombai.jpg'
-    },
-    {
-        name: 'Алтай',
-        link: 'images/element-altai.jpg'
-    },
-    {
-        name: 'Карелия',
-        link: 'images/element-kareliya.jpg'
-    },
-    {
-        name: 'Владивосток',
-        link: 'images/element-vladivostok.jpg'
-    }
-];
 
 export class Card {
     constructor(name, link, cardSelector) {
@@ -52,8 +19,8 @@ export class Card {
             .cloneNode(true);
     }
 
-    _pressLike = (elem) => {
-        elem.classList.toggle('element__like_active');
+    _pressLike = () => {
+        this._like.classList.toggle('element__like_active');
     }
 
     _fadeRemoveElement = (popupObject) => {
@@ -79,13 +46,20 @@ export class Card {
         this._img.src = this._link;
         this._img.alt = this._name;
         this._like = this._card.querySelector('.element__like');
-        this._like.addEventListener('click', () => this._pressLike(this._like))
+        this._like.addEventListener('click', () => this._pressLike())
         this._elementDeleteBtn = this._card.querySelector('.element__delete');
 
         // Удаление карточки из DOM
         this._elementDeleteBtn.addEventListener('click', (evt) => this._deleteCard(evt));
 
         this._img.addEventListener('click', () => this._openImage());
+
+        // Плавное удаление карточки из списка
+        this._card.addEventListener('animationend', function (e) {
+            if (e.animationName === 'fade-out') {
+                e.target.remove();
+            }
+        });
 
         return this._card
     }

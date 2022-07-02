@@ -60,13 +60,10 @@ export class FormValidator {
                 this._toggleButtonState(this._inputList, this._buttonElement);
             });
         });
+        this._saveBtn = this._formElement.querySelector('.popup__save-btn');
+        this._formElement.addEventListener('submit', () => {
+            this._saveBtn.setAttribute('disabled', true);
+            this._saveBtn.classList.add('popup__save-btn_inactive');
+        });
     };
 }
-
-export const validationConfig = {
-    inputSelector: '.popup__field',
-    submitButtonSelector: '.popup__save-btn',
-    inactiveButtonClass: 'popup__save-btn_inactive',
-    inputErrorClass: 'popup__field_type_error',
-    errorClass: 'popup__field-error_active'
-};

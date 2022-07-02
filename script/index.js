@@ -1,5 +1,6 @@
-import {Card, initialCards} from "./Card.js";
-import {FormValidator, validationConfig} from "./FormValidator.js";
+import {Card} from "./Card.js";
+import {initialCards} from "./cardsInfo.js";
+import {FormValidator} from "./FormValidator.js";
 
 const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
@@ -17,6 +18,17 @@ const cardForm = cardPopup.querySelector('.popup__form');
 const newCardCloseBtn = cardPopup.querySelector('#newCardCloseBtn');
 const cardAddBtn = document.querySelector('#cardAddBtn');
 const popupList = Array.from(document.querySelectorAll('.popup'));
+const imagePopup = document.querySelector('.popup_type_image');
+const imageCloseBtn = imagePopup.querySelector('#imageCloseBtn');
+
+
+const validationConfig = {
+    inputSelector: '.popup__field',
+    submitButtonSelector: '.popup__save-btn',
+    inactiveButtonClass: 'popup__save-btn_inactive',
+    inputErrorClass: 'popup__field_type_error',
+    errorClass: 'popup__field-error_active'
+};
 
 // Закрытие popup через Esc
 const closeByEsc = (evt) => {
@@ -31,24 +43,21 @@ export const openPopup = (popup) => {
     document.addEventListener('keydown', closeByEsc);
 }
 
-export const closePopup = (popup) => {
+const closePopup = (popup) => {
     popup.classList.remove('popup_opened');
     document.removeEventListener('keydown', closeByEsc);
 }
 
-
-// Плавное удаление карточки из списка
-document.addEventListener('animationend', function (e) {
-    if (e.animationName === 'fade-out') {
-        e.target.remove();
-    }
-});
-
-// Функция создания и добавления карточки
-const renderCard = (name, link) => {
+// Функция создания карточки
+const createCard = (name, link) => {
     const newCard = new Card(name, link, '#card');
-    const cardElement = newCard.generateCard();
-    cardList.prepend(cardElement);
+    return newCard.generateCard();
+}
+
+// Функция добавления карточки в DOM
+const renderCard = (name, link) => {
+    const newCard = createCard(name, link);
+    cardList.prepend(newCard);
 }
 
 // Создаем начальные карточки и добавляем в DOM
@@ -69,10 +78,6 @@ profileEditBtn.addEventListener('click', () => {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
     openPopup(profilePopup);
-    // чтобы кнопка сохранить была активна
-    // toggleButtonState(validationConfig, [inputName, inputJob],
-    //     profilePopup.querySelector('.popup__save-btn'));
-
 })
 
 // Кнопка закрытия попапа редактирования профиля
@@ -85,9 +90,6 @@ cardForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     renderCard(inputTitle.value, inputSource.value);
     cardForm.reset();
-    const saveBtn = cardPopup.querySelector('.popup__save-btn');
-    saveBtn.setAttribute('disabled', true);
-    saveBtn.classList.add('popup__save-btn_inactive');
     closePopup(cardPopup);
 })
 
@@ -114,12 +116,14 @@ popupList.forEach((curPopup) => {
     overlayClosePopup(curPopup);
 })
 
+
+// Кнопка закрытия попапа с картинкой
+imageCloseBtn.addEventListener('click', () => {
+    closePopup(imagePopup);
+})
+
 // Валидация форм
-const formList = Array.from(document.querySelectorAll('.popup__form'));
-formList.forEach((formElement) => {
-    const fieldsetList = Array.from(formElement.querySelectorAll('.popup__field-set'));
-    fieldsetList.forEach((fieldSet) => {
-        const newValidate = new FormValidator(validationConfig, fieldSet);
-        newValidate.setValidation();
-    });
-});
+const profileValidation = new FormValidator(validationConfig, profileForm);
+const newCardValidation = new FormValidator(validationConfig, cardForm);
+profileValidation.setValidation();
+newCardValidation.setValidation();
