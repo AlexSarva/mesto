@@ -37,16 +37,24 @@ export class FormValidator {
         })
     }
 
+    disableButton = () => {
+        this._buttonElement.classList.add(this._inactiveButtonClass);
+        this._buttonElement.setAttribute('disabled', true);
+    }
+
+    enableButton = () => {
+        this._buttonElement.classList.remove(this._inactiveButtonClass);
+        this._buttonElement.removeAttribute('disabled');
+    }
+
     _toggleButtonState = () => {
         // Если есть хотя бы один невалидный инпут
         if (this._hasInvalidInput()) {
             // сделай кнопку неактивной
-            this._buttonElement.classList.add(this._inactiveButtonClass);
-            this._buttonElement.setAttribute('disabled', true);
+            this.disableButton();
         } else {
             // иначе сделай кнопку активной
-            this._buttonElement.classList.remove(this._inactiveButtonClass);
-            this._buttonElement.removeAttribute('disabled');
+            this.enableButton();
         }
     }
 
@@ -59,11 +67,6 @@ export class FormValidator {
                 this._checkInputValidity(this._formElement, inputElement);
                 this._toggleButtonState(this._inputList, this._buttonElement);
             });
-        });
-        this._saveBtn = this._formElement.querySelector('.popup__save-btn');
-        this._formElement.addEventListener('submit', () => {
-            this._saveBtn.setAttribute('disabled', true);
-            this._saveBtn.classList.add('popup__save-btn_inactive');
         });
     };
 }

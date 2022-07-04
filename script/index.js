@@ -77,6 +77,7 @@ profileForm.addEventListener('submit', (evt) => {
 profileEditBtn.addEventListener('click', () => {
     inputName.value = profileName.textContent;
     inputJob.value = profileJob.textContent;
+    profileValidation.enableButton();
     openPopup(profilePopup);
 })
 
@@ -90,6 +91,7 @@ cardForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     renderCard(inputTitle.value, inputSource.value);
     cardForm.reset();
+    newCardValidation.disableButton();
     closePopup(cardPopup);
 })
 
