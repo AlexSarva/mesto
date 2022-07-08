@@ -1,6 +1,7 @@
 import {Card} from "./Card.js";
 import {initialCards} from "./cardsInfo.js";
 import {FormValidator} from "./FormValidator.js";
+import Section from "../conponents/Section.js";
 
 const profilePopup = document.querySelector('.popup_type_profile');
 const cardPopup = document.querySelector('.popup_type_new-card');
@@ -8,7 +9,7 @@ const inputName = profilePopup.querySelector('#profile-name');
 const inputJob = profilePopup.querySelector('#profile-job');
 const profileName = document.querySelector('.profile__name'); // Имя в профиле
 const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
-const cardList = document.querySelector('.elements');
+const cardListSelector = '.elements';
 const profileForm = profilePopup.querySelector('.popup__form');
 const profileEditBtn = document.querySelector('#profileEditBtn');
 const profilePopupCloseBtn = profilePopup.querySelector('#profileFormCloseBtn');
@@ -48,22 +49,33 @@ const closePopup = (popup) => {
     document.removeEventListener('keydown', closeByEsc);
 }
 
+
+const defaultCardList = new Section({
+    items: initialCards,
+    renderer: ({name, link}) => {
+        const card = createCard(name, link);
+        defaultCardList.addItem(card);
+    }
+}, cardListSelector);
+
 // Функция создания карточки
 const createCard = (name, link) => {
     const newCard = new Card(name, link, '#card');
     return newCard.generateCard();
 }
 
-// Функция добавления карточки в DOM
-const renderCard = (name, link) => {
-    const newCard = createCard(name, link);
-    cardList.prepend(newCard);
-}
+defaultCardList.renderItems();
 
-// Создаем начальные карточки и добавляем в DOM
-initialCards.forEach(({name, link}) => {
-    renderCard(name, link);
-});
+// // Функция добавления карточки в DOM
+// const renderCard = (name, link) => {
+//     const newCard = createCard(name, link);
+//     cardList.prepend(newCard);
+// }
+//
+// // Создаем начальные карточки и добавляем в DOM
+// initialCards.forEach(({name, link}) => {
+//     renderCard(name, link);
+// });
 
 // Сохранение профиля
 profileForm.addEventListener('submit', (evt) => {
@@ -89,7 +101,8 @@ profilePopupCloseBtn.addEventListener('click', () => {
 // для Добавления Карточек
 cardForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    renderCard(inputTitle.value, inputSource.value);
+    const newCard = createCard(inputTitle.value, inputSource.value);
+    defaultCardList.addItem(newCard);
     cardForm.reset();
     newCardValidation.disableButton();
     closePopup(cardPopup);
