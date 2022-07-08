@@ -4,19 +4,22 @@ import {FormValidator} from "./FormValidator.js";
 import Section from "../conponents/Section.js";
 import PopupWithImage from "../conponents/PopupWithImage.js";
 import PopupWithForm from "../conponents/PopupWithForm.js";
+import UserInfo from "../conponents/UserInfo.js";
 
 const profilePopupElement = document.querySelector('.popup_type_profile');
 const profilePopupSelector = '.popup_type_profile';
 const cardPopupElement = document.querySelector('.popup_type_new-card');
 const cardPopupSelector = '.popup_type_new-card';
-const profileName = document.querySelector('.profile__name'); // Имя в профиле
-const profileJob = document.querySelector('.profile__occupation'); // Работа в профиле
+const profileNameSelector = '.profile__name'; // Имя в профиле
+const profileJobSelector = '.profile__occupation'; // Работа в профиле
 const cardListSelector = '.elements';
 const profileForm = profilePopupElement.querySelector('.popup__form');
 const profileEditBtn = document.querySelector('#profileEditBtn');
 const cardForm = cardPopupElement.querySelector('.popup__form');
 const cardAddBtn = document.querySelector('#cardAddBtn');
 const imagePopupSelector = '.popup_type_image';
+const inputName = document.querySelector('#profileInputName');
+const inputJob = document.querySelector('#profileInputJob');
 
 
 const validationConfig = {
@@ -27,21 +30,28 @@ const validationConfig = {
     errorClass: 'popup__field-error_active'
 };
 
+const profile = new UserInfo({
+    profileNameSelector: profileNameSelector,
+    profileJobSelector: profileJobSelector,
+})
+
 const profilePopup = new PopupWithForm({
-    formSubmit: ({profileInputName, profileInputJob}) => {
-        profileName.textContent = profileInputName;
-        profileJob.textContent = profileInputJob;
-    }
-    }, 
+        formSubmit: ({profileInputName, profileInputJob}) => {
+            profile.setUserInfo({
+                newName: profileInputName,
+                newJob: profileInputJob,
+            })
+        }
+    },
     profilePopupSelector);
 profilePopup.setEventListeners();
 
 const cardPopup = new PopupWithForm({
-    formSubmit: ({newCardTitle, newCardSource}) => {
-        const newCard = createCard(newCardTitle, newCardSource);
-        defaultCardList.addItem(newCard);
-        newCardValidation.disableButton();
-    }
+        formSubmit: ({newCardTitle, newCardSource}) => {
+            const newCard = createCard(newCardTitle, newCardSource);
+            defaultCardList.addItem(newCard);
+            newCardValidation.disableButton();
+        }
     },
     cardPopupSelector);
 cardPopup.setEventListeners();
@@ -54,19 +64,20 @@ const createCard = (name, link) => {
     const newCard = new Card({
             name: name,
             link: link,
-        handleCardClick: (name, link) => {
+            handleCardClick: (name, link) => {
                 imagePopup.open(name, link);
             }
-            },
+        },
         '#card'
-        );
+    );
     return newCard.generateCard();
 }
 
 // Кнопка редактирования профиля
 profileEditBtn.addEventListener('click', () => {
-    // inputName.value = profileName.textContent;
-    // inputJob.value = profileJob.textContent;
+    const curProfileInfo = profile.getUserInfo();
+    inputName.value = curProfileInfo.name;
+    inputJob.value = curProfileInfo.job;
     profileValidation.enableButton();
     profilePopup.open();
 })
