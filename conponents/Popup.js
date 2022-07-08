@@ -33,7 +33,7 @@ export default class Popup {
     open() {
         this._popup.classList.add('popup_opened');
         this._handleEscClose();
-        this.setEventListeners();
+        // this.setEventListeners();
     }
 
     close() {
