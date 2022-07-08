@@ -1,14 +1,9 @@
-import {openPopup} from "./index.js";
-
-const imagePopup = document.querySelector('.popup_type_image');
-const curImage = imagePopup.querySelector('.popup__image');
-const curText = imagePopup.querySelector('.popup__text');
-
 export class Card {
-    constructor(name, link, cardSelector) {
+    constructor({name, link, handleCardClick}, cardSelector) {
         this._name = name;
         this._link = link;
         this._cardSelector = cardSelector;
+        this._handleCardClick = handleCardClick;
     }
 
     _getTemplate = () => {
@@ -32,13 +27,6 @@ export class Card {
         this._fadeRemoveElement(mainElement);
     }
 
-    _openImage = () => {
-        curImage.src = this._link;
-        curImage.alt = this._name;
-        curText.textContent = this._name;
-        openPopup(imagePopup);
-    }
-
     generateCard() {
         this._card = this._getTemplate();
         this._card.querySelector('.element__title').textContent = this._name;
@@ -52,7 +40,9 @@ export class Card {
         // Удаление карточки из DOM
         this._elementDeleteBtn.addEventListener('click', (evt) => this._deleteCard(evt));
 
-        this._img.addEventListener('click', () => this._openImage());
+        this._img.addEventListener('click', () => {
+            this._handleCardClick(this._name, this._link)
+        });
 
         // Плавное удаление карточки из списка
         this._card.addEventListener('animationend', function (e) {
