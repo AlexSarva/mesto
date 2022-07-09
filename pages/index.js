@@ -42,7 +42,6 @@ const cardPopup = new PopupWithForm({
         formSubmit: ({newCardTitle, newCardSource}) => {
             const newCard = createCard(newCardTitle, newCardSource);
             defaultCardList.addItem(newCard);
-            newCardValidation.disableButton();
         }
     },
     cardPopupSelector);
@@ -77,16 +76,16 @@ profileEditBtn.addEventListener('click', () => {
 // Добавление новой карточки
 cardAddBtn.addEventListener('click', () => {
     cardPopup.open();
+    newCardValidation.disableButton();
 })
 
 const defaultCardList = new Section({
-    items: initialCards,
     renderer: ({name, link}) => {
         const card = createCard(name, link);
         defaultCardList.addItem(card);
     }
 }, cardListSelector);
-defaultCardList.renderItems();
+defaultCardList.renderItems(initialCards);
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
