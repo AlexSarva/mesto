@@ -5,6 +5,7 @@ const altaiImage = new URL('../images/element-altai.jpg', import.meta.url);
 const kareliyaImage = new URL('../images/element-kareliya.jpg', import.meta.url);
 const vladivostokImage = new URL('../images/element-vladivostok.jpg', import.meta.url);
 
+
 export const initialCards = [
     {
         name: 'Карачаевск',
@@ -36,6 +37,7 @@ export const profilePopupSelector = '.popup_type_profile';
 export const cardPopupSelector = '.popup_type_new-card';
 export const profileNameSelector = '.profile__name'; // Имя в профиле
 export const profileJobSelector = '.profile__occupation'; // Работа в профиле
+export const profileImageSelector = '.profile__avatar'; // Работа в профиле
 export const cardListSelector = '.elements';
 export const imagePopupSelector = '.popup_type_image';
 export const profileForm = document.querySelector('.popup_type_profile').querySelector('.popup__form');
@@ -53,3 +55,6 @@ export const validationConfig = {
     inputErrorClass: 'popup__field_type_error',
     errorClass: 'popup__field-error_active'
 };
+
+export const token = '521c5c18-4214-46d9-8387-7f33ad54ebee'
+export const profileInfoURL = 'https://nomoreparties.co/v1/cohort-45/users/me'
