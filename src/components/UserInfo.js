@@ -15,33 +15,4 @@ export default class UserInfo {
         this._profileImage.src = newImage;
     }
 
-    GetBaseInfo({url, token}) {
-        fetch(url,
-            {
-                method: 'GET',
-                headers: {
-                    Authorization: token
-                }
-            }
-        )
-        .then((res) => {
-            if (res.ok) {
-                return res.json();
-            }
-
-            return Promise.reject(res.status);
-        })
-        .then((res) => {
-            this.setUserInfo({
-                newName: res.name,
-                newJob: res.about,
-                newImage: res.avatar
-            });
-        })
-        .catch((err) => {
-            console.log(`Ошибка: ${err}`);
-        })
-    }
-
-
 }

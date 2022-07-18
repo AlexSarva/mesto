@@ -1,7 +1,6 @@
 import './index.css'; // добавьте импорт главного файла стилей
 import {Card} from "../components/Card.js";
 import {
-    initialCards,
     profilePopupSelector,
     cardPopupSelector,
     profileNameSelector,
@@ -16,25 +15,20 @@ import {
     inputName,
     inputJob,
     validationConfig,
-    profileInfoURL,
-    token
+    apiConfig
 } from "../utils/constants.js";
 import {FormValidator} from "../components/FormValidator.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
+import Api from "../components/Api.js";
 
 
 const profile = new UserInfo({
     profileNameSelector: profileNameSelector,
     profileJobSelector: profileJobSelector,
     profileImageSelector: profileImageSelector
-})
-
-profile.GetBaseInfo({
-    url: profileInfoURL,
-    token: token
 })
 
 const profilePopup = new PopupWithForm({
@@ -95,10 +89,27 @@ const defaultCardList = new Section({
         defaultCardList.addItem(card);
     }
 }, cardListSelector);
-defaultCardList.renderItems(initialCards);
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
 const newCardValidation = new FormValidator(validationConfig, cardForm);
 profileValidation.setValidation();
 newCardValidation.setValidation();
+
+const api = new Api(apiConfig);
+api.getInitialProfileInfo({
+   updater: ({name, about, avatar}) => {
+       profile.setUserInfo({
+           newName: name,
+           newJob: about,
+           newImage: avatar
+           }
+       )
+   }
+});
+
+api.getInitialCards({
+    updater: (items) => {
+        defaultCardList.renderItems(items)
+    }
+})
