@@ -3,6 +3,7 @@ import {Card} from "../components/Card.js";
 import {
     profilePopupSelector,
     cardPopupSelector,
+    attentionPopupSelector,
     profileNameSelector,
     profileJobSelector,
     profileImageSelector,
@@ -23,6 +24,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
+import PopupWithAttention from "../components/PopupWithAttention.js";
 
 
 const profile = new UserInfo({
@@ -54,21 +56,35 @@ const cardPopup = new PopupWithForm({
     cardPopupSelector);
 cardPopup.setEventListeners();
 
+const attentionPopup = new PopupWithAttention({
+    formSubmit: (id) => {
+        api.deleteCard(id)
+        document.getElementById(id).classList.add('fade_type_out');
+    }
+},
+    attentionPopupSelector);
+attentionPopup.setEventListeners();
+
+
 const imagePopup = new PopupWithImage(imagePopupSelector);
 imagePopup.setEventListeners();
 
 // Функция создания карточки
-const createCard = (name, link, deleteCond, likesCnt) => {
+const createCard = (id, name, link, deleteCond, likesCnt) => {
     const newCard = new Card({
+            _id: id,
             name: name,
             link: link,
             likesCnt: likesCnt,
             deleteCond: deleteCond,
             handleCardClick: (name, link) => {
                 imagePopup.open(name, link);
+            },
+            handleDelClick: (evt) => {
+                attentionPopup.open(evt);
             }
         },
-        '#card'
+            '#card'
     );
     return newCard.generateCard();
 }
@@ -89,16 +105,16 @@ cardAddBtn.addEventListener('click', () => {
 })
 
 const defaultCardList = new Section({
-    renderer: ({name, link, deleteCond, likes}) => {
-        const card = createCard(name, link, deleteCond, likes.length);
+    renderer: ({_id, name, link, deleteCond, likes}) => {
+        const card = createCard(_id, name, link, deleteCond, likes.length);
         defaultCardList.addItem(card);
     }
 }, cardListSelector);
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
-const newCardValidation = new FormValidator(validationConfig, cardForm);
 profileValidation.setValidation();
+const newCardValidation = new FormValidator(validationConfig, cardForm);
 newCardValidation.setValidation();
 
 const api = new Api(apiConfig, {
@@ -112,8 +128,8 @@ const api = new Api(apiConfig, {
     cardsRenderer: (items) => {
         defaultCardList.renderItems(items)
     },
-    newCardInserter: ({name, link, deleteCond, likes}) => {
-        const card = createCard(name, link, deleteCond, likes.length);
+    newCardInserter: ({_id, name, link, deleteCond, likes}) => {
+        const card = createCard(_id, name, link, deleteCond, likes.length);
         defaultCardList.addItem(card);
     }
 });

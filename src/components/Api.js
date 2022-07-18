@@ -102,6 +102,25 @@ export default class Api {
             })
     }
 
+    deleteCard(id) {
+        fetch(`${this._baseUrl}/cards/${id}`,{
+            headers: this._headers,
+            method: 'DELETE',
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(res.status);
+            })
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            })
+    }
+
     getBaseContent() {
         this._getInitialProfileInfo();
         this._getInitialCards();

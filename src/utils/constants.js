@@ -1,5 +1,6 @@
 export const profilePopupSelector = '.popup_type_profile';
 export const cardPopupSelector = '.popup_type_new-card';
+export const attentionPopupSelector = '.popup_type_delete-card';
 export const profileNameSelector = '.profile__name'; // Имя в профиле
 export const profileJobSelector = '.profile__occupation'; // Работа в профиле
 export const profileImageSelector = '.profile__avatar'; // Работа в профиле
