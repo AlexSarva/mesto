@@ -1,10 +1,10 @@
 export default class Api {
     constructor({baseUrl, headers}, {profileUpdater,
-    cardsUpdater}) {
+        cardsRenderer}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
         this._profileUpdater = profileUpdater;
-        this._cardsUpdater = cardsUpdater;
+        this._cardsRenderer = cardsRenderer;
     }
 
     _getInitialProfileInfo() {
@@ -36,7 +36,7 @@ export default class Api {
                 return Promise.reject(res.status);
             })
             .then((res) => {
-                this._cardsUpdater(res);
+                this._cardsRenderer(res);
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);

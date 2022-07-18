@@ -104,7 +104,7 @@ const api = new Api(apiConfig, {
             newImage: avatar
         })
     },
-    cardsUpdater: (items) => {
+    cardsRenderer: (items) => {
         defaultCardList.renderItems(items)
     },
 });
