@@ -47,13 +47,27 @@
                  name="profile-job" minlength="2" maxlength="200">
           <span class="popup__field-error profileInputJob-error"></span>
         </label>
-        <button type="submit" class="popup__save-btn button" value="Сохранить"
-                name="profile-save-btn" id="profileFormSaveBtn">Сохранить
-        </button>
       </fieldset>
+      <button type="submit" class="popup__save-btn button" value="Сохранить"
+              name="profile-save-btn" id="profileFormSaveBtn">Сохранить
+      </button>
     </form>
   </div>
 </div>
+
+<div class="popup popup_opened popup_type_delete-card">
+  <div class="popup__container popup__container_type_form">
+    <button type="button" class="popup__close-btn button" value="Закрыть" name="delete-card-close-btn"
+            id="deleteCardPopupCloseBtn"></button>
+    <h3 class="popup__title">Вы уверены?</h3>
+    <form class="popup__form" name="profile-popup" novalidate>
+        <button type="submit" class="popup__save-btn button" value="Да"
+                name="profile-save-btn" id="deleteCardPopupSaveBtn">Да
+        </button>
+    </form>
+  </div>
+</div>
+
 <div class="popup popup_type_new-card">
   <div class="popup__container popup__container_type_form">
     <button type="button" class="popup__close-btn button" value="Закрыть" name="new-card-close-btn"
@@ -72,10 +86,10 @@
                  name="new-card-source">
           <span class="popup__field-error newCardSource-error"></span>
         </label>
-        <button type="submit" class="popup__save-btn button" value="Сохранить"
-                name="new-card-save-btn" id="newCardSaveBtn">Сохранить
-        </button>
       </fieldset>
+      <button type="submit" class="popup__save-btn button" value="Сохранить"
+              name="new-card-save-btn" id="newCardSaveBtn">Сохранить
+      </button>
     </form>
   </div>
 </div>

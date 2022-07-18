@@ -2,7 +2,7 @@
   font-family: 'Inter', Arial, sans-serif;
   font-weight: 900;
   font-size: 24px;
-  margin: 34px 0 20px 0;
+  margin: 34px 0 0 0;
   width: 358px;
 }
 
@@ -10,6 +10,6 @@
   .popup__title {
     width: 85%;
     font-size: 18px;
-    margin: 25px 0 47px 0;
+    margin: 25px 0 27px 0;
   }
 }

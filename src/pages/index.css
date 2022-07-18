@@ -6,6 +6,7 @@
 @import url(../blocks/popup/_type/_image/popup_type_image.css);
 @import url(../blocks/popup/_type/_profile/popup_type_profile.css);
 @import url(../blocks/popup/_type/_new-card/popup_type_new-card.css);
+@import url(../blocks/popup/_type/_delete-card/popup_type_delete-card.css);
 @import url(../blocks/popup/__container/popup_container.css);
 @import url(../blocks/popup/__container/_type/_image/popup__container_type_image.css);
 @import url(../blocks/popup/__container/_type/_form/popup__container_type_form.css);
