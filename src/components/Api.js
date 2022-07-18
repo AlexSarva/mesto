@@ -1,10 +1,11 @@
 export default class Api {
     constructor({baseUrl, headers}, {profileUpdater,
-        cardsRenderer}) {
+        cardsRenderer, newCardInserter}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
         this._profileUpdater = profileUpdater;
         this._cardsRenderer = cardsRenderer;
+        this._newCardInserter = newCardInserter;
     }
 
     _getInitialProfileInfo() {
@@ -60,6 +61,29 @@ export default class Api {
             })
             .then((res) => {
                 this._profileUpdater(res)
+            })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            })
+    }
+
+    addNewCard({name, link}) {
+        fetch(`${this._baseUrl}/cards`,{
+            headers: this._headers,
+            method: 'POST',
+            body: JSON.stringify({
+                name: name,
+                link: link
+            })
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(res.status);
+            })
+            .then((res) => {
+                this._newCardInserter(res)
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);

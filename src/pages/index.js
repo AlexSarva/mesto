@@ -44,8 +44,11 @@ profilePopup.setEventListeners();
 
 const cardPopup = new PopupWithForm({
         formSubmit: ({newCardTitle, newCardSource}) => {
-            const newCard = createCard(newCardTitle, newCardSource);
-            defaultCardList.addItem(newCard);
+            api.addNewCard({
+                name: newCardTitle,
+                link: newCardSource
+            })
+
         }
     },
     cardPopupSelector);
@@ -55,10 +58,11 @@ const imagePopup = new PopupWithImage(imagePopupSelector);
 imagePopup.setEventListeners();
 
 // Функция создания карточки
-const createCard = (name, link) => {
+const createCard = (name, link, likesCnt) => {
     const newCard = new Card({
             name: name,
             link: link,
+            likesCnt: likesCnt,
             handleCardClick: (name, link) => {
                 imagePopup.open(name, link);
             }
@@ -84,8 +88,8 @@ cardAddBtn.addEventListener('click', () => {
 })
 
 const defaultCardList = new Section({
-    renderer: ({name, link}) => {
-        const card = createCard(name, link);
+    renderer: ({name, link, likes}) => {
+        const card = createCard(name, link, likes.length);
         defaultCardList.addItem(card);
     }
 }, cardListSelector);
@@ -107,5 +111,9 @@ const api = new Api(apiConfig, {
     cardsRenderer: (items) => {
         defaultCardList.renderItems(items)
     },
+    newCardInserter: ({name, link, likes}) => {
+        const card = createCard(name, link, likes.length);
+        defaultCardList.addItem(card);
+    }
 });
 api.getBaseContent();

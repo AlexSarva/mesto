@@ -93,7 +93,10 @@
     <img class="element__image" src="<%=require('./images/element-template.png')%>" alt="template">
     <div class="element__info">
       <h2 class="element__title"></h2>
-      <button type="button" value="Лайк" class="element__like button" name="like-btn"></button>
+      <div class="element__reaction">
+        <button type="button" value="Лайк" class="element__like button" name="like-btn"></button>
+        <p class="element__like-cnt">100</p>
+      </div>
     </div>
     <button type="button" value="Удалить" class="element__delete button" name="delete-btn"></button>
   </article>

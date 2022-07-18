@@ -1,7 +1,8 @@
 export class Card {
-    constructor({name, link, handleCardClick}, cardSelector) {
+    constructor({name, link, likesCnt, handleCardClick}, cardSelector) {
         this._name = name;
         this._link = link;
+        this._likesCnt = likesCnt;
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
     }
@@ -35,6 +36,8 @@ export class Card {
         this._img.alt = this._name;
         this._like = this._card.querySelector('.element__like');
         this._like.addEventListener('click', () => this._pressLike())
+        this._likeCnt = this._card.querySelector('.element__like-cnt');
+        this._likeCnt.textContent = this._likesCnt;
         this._elementDeleteBtn = this._card.querySelector('.element__delete');
 
         // Удаление карточки из DOM
