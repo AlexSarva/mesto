@@ -50,6 +50,7 @@
 @import url(../blocks/element/__like-cnt/element__like-cnt.css);
 @import url(../blocks/element/__like/_active/element__like_active.css);
 @import url(../blocks/element/__delete/element__delete.css);
+@import url(../blocks/element/__delete/_active/element__delete_active.css);
 
 @import url(../blocks/footer/footer.css);
 

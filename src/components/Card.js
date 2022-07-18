@@ -1,8 +1,9 @@
 export class Card {
-    constructor({name, link, likesCnt, handleCardClick}, cardSelector) {
+    constructor({name, link, likesCnt, deleteCond, handleCardClick}, cardSelector) {
         this._name = name;
         this._link = link;
         this._likesCnt = likesCnt;
+        this._deleteCond = deleteCond;
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
     }
@@ -35,16 +36,20 @@ export class Card {
         this._img.src = this._link;
         this._img.alt = this._name;
         this._like = this._card.querySelector('.element__like');
-        this._like.addEventListener('click', () => this._pressLike())
+        this._like.addEventListener('click', () => this._pressLike());
         this._likeCnt = this._card.querySelector('.element__like-cnt');
         this._likeCnt.textContent = this._likesCnt;
         this._elementDeleteBtn = this._card.querySelector('.element__delete');
+
+        if (!this._deleteCond) {
+            this._elementDeleteBtn.classList.add('element__delete_active');
+        }
 
         // Удаление карточки из DOM
         this._elementDeleteBtn.addEventListener('click', (evt) => this._deleteCard(evt));
 
         this._img.addEventListener('click', () => {
-            this._handleCardClick(this._name, this._link)
+            this._handleCardClick(this._name, this._link);
         });
 
         // Плавное удаление карточки из списка
