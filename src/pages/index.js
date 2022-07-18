@@ -33,9 +33,9 @@ const profile = new UserInfo({
 
 const profilePopup = new PopupWithForm({
         formSubmit: ({profileInputName, profileInputJob}) => {
-            profile.setUserInfo({
-                newName: profileInputName,
-                newJob: profileInputJob,
+            api.patchProfileInfo({
+                name: profileInputName,
+                about: profileInputJob
             })
         }
     },
@@ -96,20 +96,16 @@ const newCardValidation = new FormValidator(validationConfig, cardForm);
 profileValidation.setValidation();
 newCardValidation.setValidation();
 
-const api = new Api(apiConfig);
-api.getInitialProfileInfo({
-   updater: ({name, about, avatar}) => {
-       profile.setUserInfo({
-           newName: name,
-           newJob: about,
-           newImage: avatar
-           }
-       )
-   }
-});
-
-api.getInitialCards({
-    updater: (items) => {
+const api = new Api(apiConfig, {
+    profileUpdater: ({name, about, avatar}) => {
+        profile.setUserInfo({
+            newName: name,
+            newJob: about,
+            newImage: avatar
+        })
+    },
+    cardsUpdater: (items) => {
         defaultCardList.renderItems(items)
-    }
-})
+    },
+});
+api.getBaseContent();
