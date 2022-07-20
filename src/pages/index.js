@@ -4,6 +4,7 @@ import {
     profilePopupSelector,
     cardPopupSelector,
     attentionPopupSelector,
+    avatarPopupSelector,
     profileNameSelector,
     profileJobSelector,
     profileImageSelector,
@@ -12,7 +13,9 @@ import {
     profileForm,
     profileEditBtn,
     cardForm,
+    avatarForm,
     cardAddBtn,
+    avatarEditBtn,
     inputName,
     inputJob,
     validationConfig,
@@ -57,13 +60,29 @@ const cardPopup = new PopupWithForm({
 cardPopup.setEventListeners();
 
 const attentionPopup = new PopupWithAttention({
-    formSubmit: (id) => {
-        api.deleteCard(id)
-        document.getElementById(id).classList.add('fade_type_out');
-    }
-},
+        formSubmit: (id) => {
+            api.deleteCard(id)
+            document.getElementById(id).classList.add('fade_type_out');
+        }
+    },
     attentionPopupSelector);
 attentionPopup.setEventListeners();
+
+const avatarPopup = new PopupWithForm({
+        formSubmit: ({avatarSource}) => {
+            console.log(avatarSource);
+            api.editAvatar({
+                url: avatarSource
+            })
+        }
+    },
+    avatarPopupSelector);
+avatarPopup.setEventListeners();
+
+avatarEditBtn.addEventListener('click', () => {
+    avatarPopup.open();
+    avatarValidation.disableButton();
+})
 
 
 const imagePopup = new PopupWithImage(imagePopupSelector);
@@ -84,7 +103,7 @@ const createCard = (id, name, link, deleteCond, likesCnt) => {
                 attentionPopup.open(evt);
             }
         },
-            '#card'
+        '#card'
     );
     return newCard.generateCard();
 }
@@ -116,6 +135,8 @@ const profileValidation = new FormValidator(validationConfig, profileForm);
 profileValidation.setValidation();
 const newCardValidation = new FormValidator(validationConfig, cardForm);
 newCardValidation.setValidation();
+const avatarValidation = new FormValidator(validationConfig, avatarForm);
+avatarValidation.setValidation();
 
 const api = new Api(apiConfig, {
     profileUpdater: ({name, about, avatar}) => {

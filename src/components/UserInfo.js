@@ -12,7 +12,7 @@ export default class UserInfo {
     setUserInfo({newName, newJob, newImage}) {
         this._profileName.textContent = newName;
         this._profileJob.textContent = newJob;
-        this._profileImage.src = newImage;
+        this._profileImage.style.backgroundImage = `url('${newImage}')`;
     }
 
 }

@@ -1,17 +1,20 @@
 export const profilePopupSelector = '.popup_type_profile';
 export const cardPopupSelector = '.popup_type_new-card';
 export const attentionPopupSelector = '.popup_type_delete-card';
+export const avatarPopupSelector = '.popup_type_avatar';
 export const profileNameSelector = '.profile__name'; // Имя в профиле
 export const profileJobSelector = '.profile__occupation'; // Работа в профиле
-export const profileImageSelector = '.profile__avatar'; // Работа в профиле
+export const profileImageSelector = '.profile__avatar-btn'; // Работа в профиле
 export const cardListSelector = '.elements';
 export const imagePopupSelector = '.popup_type_image';
 export const profileForm = document.querySelector('.popup_type_profile').querySelector('.popup__form');
 export const profileEditBtn = document.querySelector('#profileEditBtn');
 export const cardForm = document.querySelector('.popup_type_new-card').querySelector('.popup__form');
+export const avatarForm = document.querySelector('.popup_type_avatar').querySelector('.popup__form');
 export const cardAddBtn = document.querySelector('#cardAddBtn');
 export const inputName = document.querySelector('#profileInputName');
 export const inputJob = document.querySelector('#profileInputJob');
+export const avatarEditBtn = document.querySelector('#avatarEditBtn');
 
 
 export const validationConfig = {

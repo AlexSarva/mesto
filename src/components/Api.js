@@ -1,6 +1,8 @@
 export default class Api {
-    constructor({baseUrl, headers}, {profileUpdater,
-        cardsRenderer, newCardInserter}) {
+    constructor({baseUrl, headers}, {
+        profileUpdater,
+        cardsRenderer, newCardInserter
+    }) {
         this._baseUrl = baseUrl;
         this._headers = headers;
         this._profileUpdater = profileUpdater;
@@ -56,14 +58,14 @@ export default class Api {
     }
 
     patchProfileInfo({name, about}) {
-        fetch(`${this._baseUrl}/users/me`,{
-                headers: this._headers,
-                method: 'PATCH',
-                body: JSON.stringify({
-                    name: name,
-                    about: about
-                })
+        fetch(`${this._baseUrl}/users/me`, {
+            headers: this._headers,
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: name,
+                about: about
             })
+        })
             .then((res) => {
                 if (res.ok) {
                     return res.json()
@@ -71,7 +73,6 @@ export default class Api {
                 return Promise.reject(res.status);
             })
             .then((res) => {
-                res.deleteCond = this._checkDeleteCond(res)
                 this._profileUpdater(res)
             })
             .catch((err) => {
@@ -80,7 +81,7 @@ export default class Api {
     }
 
     addNewCard({name, link}) {
-        fetch(`${this._baseUrl}/cards`,{
+        fetch(`${this._baseUrl}/cards`, {
             headers: this._headers,
             method: 'POST',
             body: JSON.stringify({
@@ -103,7 +104,7 @@ export default class Api {
     }
 
     deleteCard(id) {
-        fetch(`${this._baseUrl}/cards/${id}`,{
+        fetch(`${this._baseUrl}/cards/${id}`, {
             headers: this._headers,
             method: 'DELETE',
         })
@@ -115,6 +116,28 @@ export default class Api {
             })
             .then((res) => {
                 console.log(res);
+            })
+            .catch((err) => {
+                console.log(`Ошибка: ${err}`);
+            })
+    }
+
+    editAvatar({url}) {
+        fetch(`${this._baseUrl}/users/me/avatar`, {
+            headers: this._headers,
+            method: 'PATCH',
+            body: JSON.stringify({
+                avatar: url,
+            })
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json()
+                }
+                return Promise.reject(res.status);
+            })
+            .then((res) => {
+                this._profileUpdater(res);
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
