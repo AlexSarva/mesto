@@ -1,70 +1,92 @@
 import './index.css'; // добавьте импорт главного файла стилей
 import {Card} from "../components/Card.js";
 import {
-    initialCards,
     profilePopupSelector,
     cardPopupSelector,
+    attentionPopupSelector,
+    avatarPopupSelector,
     profileNameSelector,
     profileJobSelector,
+    profileImageSelector,
     cardListSelector,
     imagePopupSelector,
     profileForm,
     profileEditBtn,
     cardForm,
+    avatarForm,
     cardAddBtn,
+    avatarEditBtn,
     inputName,
     inputJob,
-    validationConfig
+    cardSelector,
+    validationConfig,
+    apiConfig
 } from "../utils/constants.js";
 import {FormValidator} from "../components/FormValidator.js";
 import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
+import Api from "../components/Api.js";
+import PopupWithAttention from "../components/PopupWithAttention.js";
 
+// Profile class
 const profile = new UserInfo({
     profileNameSelector: profileNameSelector,
     profileJobSelector: profileJobSelector,
+    profileImageSelector: profileImageSelector
 })
 
+// Profile Popup
 const profilePopup = new PopupWithForm({
         formSubmit: ({profileInputName, profileInputJob}) => {
-            profile.setUserInfo({
-                newName: profileInputName,
-                newJob: profileInputJob,
+            api.patchProfileInfo({
+                name: profileInputName,
+                about: profileInputJob
             })
         }
     },
     profilePopupSelector);
 profilePopup.setEventListeners();
 
+// NewCard Popup
 const cardPopup = new PopupWithForm({
         formSubmit: ({newCardTitle, newCardSource}) => {
-            const newCard = createCard(newCardTitle, newCardSource);
-            defaultCardList.addItem(newCard);
+            api.addNewCard({
+                name: newCardTitle,
+                link: newCardSource
+            })
         }
     },
     cardPopupSelector);
 cardPopup.setEventListeners();
 
+// Attention Popup
+const attentionPopup = new PopupWithAttention({
+        formSubmit: (id) => {
+            api.deleteCard(id)
+            document.getElementById(id).classList.add('fade_type_out');
+        }
+    },
+    attentionPopupSelector);
+attentionPopup.setEventListeners();
+
+// Avatar Popup
+const avatarPopup = new PopupWithForm({
+        formSubmit: ({avatarSource}) => {
+            api.editAvatar({
+                url: avatarSource
+            })
+        }
+    },
+    avatarPopupSelector);
+avatarPopup.setEventListeners();
+
+// Image Popup
 const imagePopup = new PopupWithImage(imagePopupSelector);
 imagePopup.setEventListeners();
 
-// Функция создания карточки
-const createCard = (name, link) => {
-    const newCard = new Card({
-            name: name,
-            link: link,
-            handleCardClick: (name, link) => {
-                imagePopup.open(name, link);
-            }
-        },
-        '#card'
-    );
-    return newCard.generateCard();
-}
-
-// Кнопка редактирования профиля
+// Profile edit btn
 profileEditBtn.addEventListener('click', () => {
     const curProfileInfo = profile.getUserInfo();
     inputName.value = curProfileInfo.name;
@@ -73,22 +95,94 @@ profileEditBtn.addEventListener('click', () => {
     profilePopup.open();
 })
 
-// Добавление новой карточки
+// Avatar edit btn
+avatarEditBtn.addEventListener('click', () => {
+    avatarPopup.open();
+    avatarValidation.disableButton();
+})
+
+// New card btn
 cardAddBtn.addEventListener('click', () => {
     cardPopup.open();
     newCardValidation.disableButton();
 })
 
-const defaultCardList = new Section({
-    renderer: ({name, link}) => {
-        const card = createCard(name, link);
+// Cards section
+// TODO Нужен ли тут renderer
+const defaultCardList = new Section(cardListSelector);
+
+// API
+const api = new Api(apiConfig, {
+    profileUpdater: ({name, about, avatar}) => {
+        profile.setUserInfo({
+            newName: name,
+            newJob: about,
+            newImage: avatar
+        })
+    },
+    newCardRenderer: ({_id, name, link, likes}, {deleteCond, likeCond}) => {
+        const card = createCard({
+            id: _id,
+            name: name,
+            link: link,
+            likesCnt: likes.length
+        }, {
+            deleteCond: deleteCond,
+            likeCond: likeCond
+        });
         defaultCardList.addItem(card);
     }
-}, cardListSelector);
-defaultCardList.renderItems(initialCards);
+}, {
+    avatarSaveRender: (isLoading) => {
+        avatarPopup.renderSaving(isLoading);
+    },
+    profileSaveRender: (isLoading) => {
+        profilePopup.renderSaving(isLoading);
+    },
+    newCardSaveRender: (isLoading) => {
+        cardPopup.renderSaving(isLoading);
+    }
+});
+api.getBaseContent();
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
-const newCardValidation = new FormValidator(validationConfig, cardForm);
 profileValidation.setValidation();
+const newCardValidation = new FormValidator(validationConfig, cardForm);
 newCardValidation.setValidation();
+const avatarValidation = new FormValidator(validationConfig, avatarForm);
+avatarValidation.setValidation();
+
+// Функция создания карточки
+const createCard = ({id, name, link, likesCnt}, {deleteCond, likeCond}) => {
+    const newCard = new Card({
+            _id: id,
+            name: name,
+            link: link,
+            likesCnt: likesCnt,
+            deleteCond: deleteCond,
+            likeCond: likeCond
+        }, {
+            handleCardClick: (name, link) => {
+                imagePopup.open(name, link);
+            },
+            handleDelClick: (evt) => {
+                attentionPopup.open(evt);
+            },
+            handleLikeClick: (likeState, imgID) => {
+                api.pressLike({
+                    likeState: likeState,
+                    imgID: imgID
+                }, {
+                    updateLikesCnt: (res) => {
+                        newCard.updateLikes({likesCnt: res.likes.length});
+                    }
+                });
+
+
+            }
+        },
+        cardSelector
+    );
+    return newCard.generateCard();
+}
