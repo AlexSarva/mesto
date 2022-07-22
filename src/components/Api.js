@@ -1,13 +1,12 @@
 export default class Api {
     constructor({baseUrl, headers}, {
         profileUpdater,
-        cardsRenderer, newCardInserter
+        newCardRenderer,
     }) {
         this._baseUrl = baseUrl;
         this._headers = headers;
         this._profileUpdater = profileUpdater;
-        this._cardsRenderer = cardsRenderer;
-        this._newCardInserter = newCardInserter;
+        this._newCardRenderer = newCardRenderer;
     }
 
     _getInitialProfileInfo() {
@@ -33,6 +32,23 @@ export default class Api {
         return item.owner._id !== this._myID;
     }
 
+    _checkMyLike(item) {
+        let myLike = false
+        item.likes.forEach(user => {
+            if (user._id === this._myID) {
+                myLike = true
+            }
+        })
+        return myLike
+    }
+
+    _checkConditions(item) {
+        return {
+            deleteCond: this._checkDeleteCond(item),
+            likeCond: this._checkMyLike(item)
+        }
+    }
+
     _getInitialCards() {
         fetch(`${this._baseUrl}/cards`,
             {headers: this._headers})
@@ -44,13 +60,9 @@ export default class Api {
                 return Promise.reject(res.status);
             })
             .then((res) => {
-                res.forEach(item => {
-                    item.deleteCond = this._checkDeleteCond(item)
+                res.reverse().forEach(item => {
+                    this._newCardRenderer(item, this._checkConditions(item));
                 })
-                return res
-            })
-            .then((res) => {
-                this._cardsRenderer(res);
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
@@ -73,7 +85,7 @@ export default class Api {
                 return Promise.reject(res.status);
             })
             .then((res) => {
-                this._profileUpdater(res)
+                this._profileUpdater(res);
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
@@ -96,7 +108,7 @@ export default class Api {
                 return Promise.reject(res.status);
             })
             .then((res) => {
-                this._newCardInserter(res)
+                this._newCardRenderer(res, this._checkConditions(res));
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
@@ -114,6 +126,7 @@ export default class Api {
                 }
                 return Promise.reject(res.status);
             })
+            // TODO удалить или оставить
             .then((res) => {
                 console.log(res);
             })
@@ -142,6 +155,48 @@ export default class Api {
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
             })
+    }
+
+    pressLike({likeState, imgID}, {updateLikesCnt}) {
+        if (!likeState) {
+            fetch(`${this._baseUrl}/cards/${imgID}/likes`,
+                {
+                    headers: this._headers,
+                    method: 'DELETE'
+                })
+                .then((res) => {
+                    if (res.ok) {
+                        return res.json();
+                    }
+
+                    return Promise.reject(res.status);
+                })
+                .then((res) => {
+                    updateLikesCnt(res);
+                })
+                .catch((err) => {
+                    console.log(`Ошибка: ${err}`);
+                })
+        } else {
+            fetch(`${this._baseUrl}/cards/${imgID}/likes`,
+                {
+                    headers: this._headers,
+                    method: 'PUT'
+                })
+                .then((res) => {
+                    if (res.ok) {
+                        return res.json();
+                    }
+
+                    return Promise.reject(res.status);
+                })
+                .then((res) => {
+                    updateLikesCnt(res);
+                })
+                .catch((err) => {
+                    console.log(`Ошибка: ${err}`);
+                })
+        }
     }
 
     getBaseContent() {

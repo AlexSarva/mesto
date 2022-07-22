@@ -7,6 +7,7 @@ export const profileJobSelector = '.profile__occupation'; // Работа в п�
 export const profileImageSelector = '.profile__avatar-btn'; // Работа в профиле
 export const cardListSelector = '.elements';
 export const imagePopupSelector = '.popup_type_image';
+export const cardSelector = '#card';
 export const profileForm = document.querySelector('.popup_type_profile').querySelector('.popup__form');
 export const profileEditBtn = document.querySelector('#profileEditBtn');
 export const cardForm = document.querySelector('.popup_type_new-card').querySelector('.popup__form');

@@ -18,6 +18,7 @@ import {
     avatarEditBtn,
     inputName,
     inputJob,
+    cardSelector,
     validationConfig,
     apiConfig
 } from "../utils/constants.js";
@@ -29,13 +30,14 @@ import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api.js";
 import PopupWithAttention from "../components/PopupWithAttention.js";
 
-
+// Profile class
 const profile = new UserInfo({
     profileNameSelector: profileNameSelector,
     profileJobSelector: profileJobSelector,
     profileImageSelector: profileImageSelector
 })
 
+// Profile Popup
 const profilePopup = new PopupWithForm({
         formSubmit: ({profileInputName, profileInputJob}) => {
             api.patchProfileInfo({
@@ -47,18 +49,19 @@ const profilePopup = new PopupWithForm({
     profilePopupSelector);
 profilePopup.setEventListeners();
 
+// NewCard Popup
 const cardPopup = new PopupWithForm({
         formSubmit: ({newCardTitle, newCardSource}) => {
             api.addNewCard({
                 name: newCardTitle,
                 link: newCardSource
             })
-
         }
     },
     cardPopupSelector);
 cardPopup.setEventListeners();
 
+// Attention Popup
 const attentionPopup = new PopupWithAttention({
         formSubmit: (id) => {
             api.deleteCard(id)
@@ -68,6 +71,7 @@ const attentionPopup = new PopupWithAttention({
     attentionPopupSelector);
 attentionPopup.setEventListeners();
 
+// Avatar Popup
 const avatarPopup = new PopupWithForm({
         formSubmit: ({avatarSource}) => {
             console.log(avatarSource);
@@ -79,36 +83,11 @@ const avatarPopup = new PopupWithForm({
     avatarPopupSelector);
 avatarPopup.setEventListeners();
 
-avatarEditBtn.addEventListener('click', () => {
-    avatarPopup.open();
-    avatarValidation.disableButton();
-})
-
-
+// Image Popup
 const imagePopup = new PopupWithImage(imagePopupSelector);
 imagePopup.setEventListeners();
 
-// Функция создания карточки
-const createCard = (id, name, link, deleteCond, likesCnt) => {
-    const newCard = new Card({
-            _id: id,
-            name: name,
-            link: link,
-            likesCnt: likesCnt,
-            deleteCond: deleteCond,
-            handleCardClick: (name, link) => {
-                imagePopup.open(name, link);
-            },
-            handleDelClick: (evt) => {
-                attentionPopup.open(evt);
-            }
-        },
-        '#card'
-    );
-    return newCard.generateCard();
-}
-
-// Кнопка редактирования профиля
+// Profile edit btn
 profileEditBtn.addEventListener('click', () => {
     const curProfileInfo = profile.getUserInfo();
     inputName.value = curProfileInfo.name;
@@ -117,18 +96,45 @@ profileEditBtn.addEventListener('click', () => {
     profilePopup.open();
 })
 
-// Добавление новой карточки
+// Avatar edit btn
+avatarEditBtn.addEventListener('click', () => {
+    avatarPopup.open();
+    avatarValidation.disableButton();
+})
+
+// New card btn
 cardAddBtn.addEventListener('click', () => {
     cardPopup.open();
     newCardValidation.disableButton();
 })
 
-const defaultCardList = new Section({
-    renderer: ({_id, name, link, deleteCond, likes}) => {
-        const card = createCard(_id, name, link, deleteCond, likes.length);
+// Cards section
+// TODO Нужен ли тут renderer
+const defaultCardList = new Section(cardListSelector);
+
+// API
+const api = new Api(apiConfig, {
+    profileUpdater: ({name, about, avatar}) => {
+        profile.setUserInfo({
+            newName: name,
+            newJob: about,
+            newImage: avatar
+        })
+    },
+    newCardRenderer: ({_id, name, link, likes}, {deleteCond, likeCond}) => {
+        const card = createCard({
+            id: _id,
+            name: name,
+            link: link,
+            likesCnt: likes.length
+        }, {
+            deleteCond: deleteCond,
+            likeCond: likeCond
+        });
         defaultCardList.addItem(card);
     }
-}, cardListSelector);
+});
+api.getBaseContent();
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
@@ -138,20 +144,36 @@ newCardValidation.setValidation();
 const avatarValidation = new FormValidator(validationConfig, avatarForm);
 avatarValidation.setValidation();
 
-const api = new Api(apiConfig, {
-    profileUpdater: ({name, about, avatar}) => {
-        profile.setUserInfo({
-            newName: name,
-            newJob: about,
-            newImage: avatar
-        })
-    },
-    cardsRenderer: (items) => {
-        defaultCardList.renderItems(items)
-    },
-    newCardInserter: ({_id, name, link, deleteCond, likes}) => {
-        const card = createCard(_id, name, link, deleteCond, likes.length);
-        defaultCardList.addItem(card);
-    }
-});
-api.getBaseContent();
+// Функция создания карточки
+const createCard = ({id, name, link, likesCnt}, {deleteCond, likeCond}) => {
+    const newCard = new Card({
+            _id: id,
+            name: name,
+            link: link,
+            likesCnt: likesCnt,
+            deleteCond: deleteCond,
+            likeCond: likeCond
+        }, {
+            handleCardClick: (name, link) => {
+                imagePopup.open(name, link);
+            },
+            handleDelClick: (evt) => {
+                attentionPopup.open(evt);
+            },
+            handleLikeClick: (likeState, imgID) => {
+                api.pressLike({
+                    likeState: likeState,
+                    imgID: imgID
+                }, {
+                    updateLikesCnt: (res) => {
+                        newCard.updateLikes({likesCnt: res.likes.length});
+                    }
+                });
+
+
+            }
+        },
+        cardSelector
+    );
+    return newCard.generateCard();
+}
