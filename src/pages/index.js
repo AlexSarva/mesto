@@ -74,7 +74,6 @@ attentionPopup.setEventListeners();
 // Avatar Popup
 const avatarPopup = new PopupWithForm({
         formSubmit: ({avatarSource}) => {
-            console.log(avatarSource);
             api.editAvatar({
                 url: avatarSource
             })
@@ -132,6 +131,16 @@ const api = new Api(apiConfig, {
             likeCond: likeCond
         });
         defaultCardList.addItem(card);
+    }
+}, {
+    avatarSaveRender: (isLoading) => {
+        avatarPopup.renderSaving(isLoading);
+    },
+    profileSaveRender: (isLoading) => {
+        profilePopup.renderSaving(isLoading);
+    },
+    newCardSaveRender: (isLoading) => {
+        cardPopup.renderSaving(isLoading);
     }
 });
 api.getBaseContent();

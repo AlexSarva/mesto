@@ -1,12 +1,19 @@
 export default class Api {
     constructor({baseUrl, headers}, {
         profileUpdater,
-        newCardRenderer,
-    }) {
+        newCardRenderer
+    }, {
+                    avatarSaveRender,
+                    profileSaveRender,
+                    newCardSaveRender
+                }) {
         this._baseUrl = baseUrl;
         this._headers = headers;
         this._profileUpdater = profileUpdater;
         this._newCardRenderer = newCardRenderer;
+        this._avatarSaveRender = avatarSaveRender;
+        this._profileSaveRender = profileSaveRender;
+        this._newCardSaveRender = newCardSaveRender;
     }
 
     _getInitialProfileInfo() {
@@ -90,6 +97,9 @@ export default class Api {
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
             })
+            .finally(() => {
+                this._profileSaveRender(false);
+            })
     }
 
     addNewCard({name, link}) {
@@ -112,6 +122,9 @@ export default class Api {
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
+            })
+            .finally(() => {
+                this._newCardSaveRender(false);
             })
     }
 
@@ -154,6 +167,9 @@ export default class Api {
             })
             .catch((err) => {
                 console.log(`Ошибка: ${err}`);
+            })
+            .finally(() => {
+                this._avatarSaveRender(false);
             })
     }
 
