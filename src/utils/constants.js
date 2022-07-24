@@ -13,8 +13,6 @@ export const profileEditBtn = document.querySelector('#profileEditBtn');
 export const cardForm = document.querySelector('.popup_type_new-card').querySelector('.popup__form');
 export const avatarForm = document.querySelector('.popup_type_avatar').querySelector('.popup__form');
 export const cardAddBtn = document.querySelector('#cardAddBtn');
-export const inputName = document.querySelector('#profileInputName');
-export const inputJob = document.querySelector('#profileInputJob');
 export const avatarEditBtn = document.querySelector('#avatarEditBtn');
 
 

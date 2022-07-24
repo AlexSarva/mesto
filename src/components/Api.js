@@ -1,83 +1,34 @@
 export default class Api {
-    constructor({baseUrl, headers}, {
-        profileUpdater,
-        newCardRenderer
-    }, {
-                    avatarSaveRender,
-                    profileSaveRender,
-                    newCardSaveRender
-                }) {
+    constructor({baseUrl, headers}) {
         this._baseUrl = baseUrl;
         this._headers = headers;
-        this._profileUpdater = profileUpdater;
-        this._newCardRenderer = newCardRenderer;
-        this._avatarSaveRender = avatarSaveRender;
-        this._profileSaveRender = profileSaveRender;
-        this._newCardSaveRender = newCardSaveRender;
     }
 
-    _getInitialProfileInfo() {
-        fetch(`${this._baseUrl}/users/me`,
-            {headers: this._headers})
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
+    _checkResponse(res) {
+        if (res.ok) {
+            return res.json();
+        }
+        return Promise.reject(`Ошибка ${res.status}`);
+    }
 
-                return Promise.reject(res.status);
-            })
+    getInitialProfileInfo() {
+        return fetch(`${this._baseUrl}/users/me`,
+            {headers: this._headers})
+            .then(this._checkResponse)
             .then((res) => {
                 this._myID = res._id;
-                this._profileUpdater(res);
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
+                return res;
             })
     }
 
-    _checkDeleteCond(item) {
-        return item.owner._id !== this._myID;
-    }
-
-    _checkMyLike(item) {
-        let myLike = false
-        item.likes.forEach(user => {
-            if (user._id === this._myID) {
-                myLike = true
-            }
-        })
-        return myLike
-    }
-
-    _checkConditions(item) {
-        return {
-            deleteCond: this._checkDeleteCond(item),
-            likeCond: this._checkMyLike(item)
-        }
-    }
-
-    _getInitialCards() {
-        fetch(`${this._baseUrl}/cards`,
+    getInitialCards() {
+        return fetch(`${this._baseUrl}/cards`,
             {headers: this._headers})
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                }
-
-                return Promise.reject(res.status);
-            })
-            .then((res) => {
-                res.reverse().forEach(item => {
-                    this._newCardRenderer(item, this._checkConditions(item));
-                })
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
+            .then(this._checkResponse)
     }
 
     patchProfileInfo({name, about}) {
-        fetch(`${this._baseUrl}/users/me`, {
+        return fetch(`${this._baseUrl}/users/me`, {
             headers: this._headers,
             method: 'PATCH',
             body: JSON.stringify({
@@ -85,25 +36,11 @@ export default class Api {
                 about: about
             })
         })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(res.status);
-            })
-            .then((res) => {
-                this._profileUpdater(res);
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
-            .finally(() => {
-                this._profileSaveRender(false);
-            })
+            .then(this._checkResponse)
     }
 
     addNewCard({name, link}) {
-        fetch(`${this._baseUrl}/cards`, {
+        return fetch(`${this._baseUrl}/cards`, {
             headers: this._headers,
             method: 'POST',
             body: JSON.stringify({
@@ -111,112 +48,44 @@ export default class Api {
                 link: link
             })
         })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(res.status);
-            })
-            .then((res) => {
-                this._newCardRenderer(res, this._checkConditions(res));
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
-            .finally(() => {
-                this._newCardSaveRender(false);
-            })
+            .then(this._checkResponse)
+
     }
 
     deleteCard(id) {
-        fetch(`${this._baseUrl}/cards/${id}`, {
+        return fetch(`${this._baseUrl}/cards/${id}`, {
             headers: this._headers,
             method: 'DELETE',
         })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(res.status);
-            })
-            // TODO удалить или оставить
-            .then((res) => {
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
+            .then(this._checkResponse)
     }
 
-    editAvatar({url}) {
-        fetch(`${this._baseUrl}/users/me/avatar`, {
+    editAvatar({avatar}) {
+        return fetch(`${this._baseUrl}/users/me/avatar`, {
             headers: this._headers,
             method: 'PATCH',
             body: JSON.stringify({
-                avatar: url,
+                avatar: avatar,
             })
         })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json()
-                }
-                return Promise.reject(res.status);
-            })
-            .then((res) => {
-                this._profileUpdater(res);
-            })
-            .catch((err) => {
-                console.log(`Ошибка: ${err}`);
-            })
-            .finally(() => {
-                this._avatarSaveRender(false);
-            })
+            .then(this._checkResponse)
     }
 
-    pressLike({likeState, imgID}, {updateLikesCnt}) {
-        if (!likeState) {
-            fetch(`${this._baseUrl}/cards/${imgID}/likes`,
+    pressLike({likeState, imgID}) {
+        if (likeState) {
+            return fetch(`${this._baseUrl}/cards/${imgID}/likes`,
                 {
                     headers: this._headers,
                     method: 'DELETE'
                 })
-                .then((res) => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-
-                    return Promise.reject(res.status);
-                })
-                .then((res) => {
-                    updateLikesCnt(res);
-                })
-                .catch((err) => {
-                    console.log(`Ошибка: ${err}`);
-                })
+                .then(this._checkResponse)
         } else {
-            fetch(`${this._baseUrl}/cards/${imgID}/likes`,
+            return fetch(`${this._baseUrl}/cards/${imgID}/likes`,
                 {
                     headers: this._headers,
                     method: 'PUT'
                 })
-                .then((res) => {
-                    if (res.ok) {
-                        return res.json();
-                    }
-
-                    return Promise.reject(res.status);
-                })
-                .then((res) => {
-                    updateLikesCnt(res);
-                })
-                .catch((err) => {
-                    console.log(`Ошибка: ${err}`);
-                })
+                .then(this._checkResponse)
         }
-    }
-
-    getBaseContent() {
-        this._getInitialProfileInfo();
-        this._getInitialCards();
     }
 }

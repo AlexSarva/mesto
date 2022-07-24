@@ -1,5 +1,5 @@
 export class Card {
-    constructor({_id, name, link, likesCnt, deleteCond, likeCond}, {
+    constructor({_id, name, link, likes}, {deleteCond, likeCond}, {
         handleCardClick,
         handleDelClick,
         handleLikeClick
@@ -7,23 +7,14 @@ export class Card {
         this._id = _id;
         this._name = name;
         this._link = link;
-        this._likesCnt = likesCnt;
+        this._likesCnt = likes.length;
         this._deleteCond = deleteCond;
         this._likeCond = likeCond;
         this._cardSelector = cardSelector;
         this._handleCardClick = handleCardClick;
         this._handleDelClick = handleDelClick;
         this._handleLikeClick = handleLikeClick;
-        // Card.all.push(this);
     }
-
-    // static all = [];
-
-
-    // destroy() {
-    //     let i = Card.all.indexOf(this);
-    //     Card.all.splice(i, 1);
-    // }
 
     updateLikes({likesCnt}) {
         this._likeCnt.textContent = likesCnt;
@@ -37,7 +28,7 @@ export class Card {
             .cloneNode(true);
     }
 
-    _pressLike = () => {
+    pressLike = () => {
         this._like.classList.toggle('element__like_active');
     }
 
@@ -45,13 +36,18 @@ export class Card {
         return this._like.classList.contains('element__like_active');
     }
 
-    _fadeRemoveElement = (popupObject) => {
-        popupObject.classList.add('fade_type_out');
-    }
+    _setEventListeners() {
+        this._like.addEventListener('click', () => {
+            this._handleLikeClick(this._checkLike(), this._id);
+        });
+        // Удаление карточки из DOM
+        this._elementDeleteBtn.addEventListener('click', () => {
+            this._handleDelClick(this._id);
+        });
+        this._img.addEventListener('click', () => {
+            this._handleCardClick(this._name, this._link);
+        });
 
-    _deleteCard = (evt) => {
-        const mainElement = evt.target.closest('.element');
-        this._fadeRemoveElement(mainElement);
     }
 
     generateCard() {
@@ -63,10 +59,7 @@ export class Card {
         this._img.src = this._link;
         this._img.alt = this._name;
         this._like = this._card.querySelector('.element__like');
-        this._like.addEventListener('click', () => {
-            this._pressLike();
-            this._handleLikeClick(this._checkLike(), this._id);
-        });
+
         this._likeCnt = this._card.querySelector('.element__like-cnt');
         this._likeCnt.textContent = this._likesCnt;
         this._elementDeleteBtn = this._card.querySelector('.element__delete');
@@ -76,17 +69,8 @@ export class Card {
         }
 
         if (this._likeCond) {
-            this._pressLike();
+            this.pressLike();
         }
-
-        // Удаление карточки из DOM
-        this._elementDeleteBtn.addEventListener('click', () => {
-            this._handleDelClick(this._id);
-        });
-
-        this._img.addEventListener('click', () => {
-            this._handleCardClick(this._name, this._link);
-        });
 
         // Плавное удаление карточки из списка
         this._card.addEventListener('animationend', function (e) {
@@ -94,6 +78,8 @@ export class Card {
                 e.target.remove();
             }
         });
+
+        this._setEventListeners();
 
         return this._card
     }

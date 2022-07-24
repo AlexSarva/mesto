@@ -6,13 +6,13 @@ export default class UserInfo {
     }
 
     getUserInfo = () => {
-        return {name: this._profileName.textContent, job: this._profileJob.textContent}
+        return {name: this._profileName.textContent, about: this._profileJob.textContent}
     }
 
-    setUserInfo({newName, newJob, newImage}) {
-        this._profileName.textContent = newName;
-        this._profileJob.textContent = newJob;
-        this._profileImage.style.backgroundImage = `url('${newImage}')`;
+    setUserInfo({name, about, avatar, _id}) {
+        this._profileName.textContent = name;
+        this._profileJob.textContent = about;
+        this._profileImage.style.backgroundImage = `url('${avatar}')`;
     }
 
 }

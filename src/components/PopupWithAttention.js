@@ -11,7 +11,6 @@ export default class PopupWithAttention extends Popup {
         this._popup.addEventListener('submit', (evt) => {
             evt.preventDefault();
             this._formSubmit(this._cardID);
-            this.close();
         })
     }
 

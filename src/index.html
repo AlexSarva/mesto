@@ -50,15 +50,15 @@
     <form class="popup__form" name="profile-popup" novalidate>
       <fieldset class="popup__field-set">
         <label class="popup__label">
-          <input type="text" class="popup__field" id="profileInputName" placeholder="Имя" required
-                 name="profile-name" minlength="2" maxlength="40">
-          <span class="popup__field-error profileInputName-error"></span>
+          <input type="text" class="popup__field" id="name" placeholder="Имя" required
+                 name="name" minlength="2" maxlength="40">
+          <span class="popup__field-error name-error"></span>
         </label>
         <label class="popup__label">
-          <input type="text" class="popup__field" id="profileInputJob" placeholder="О себе"
+          <input type="text" class="popup__field" id="about" placeholder="О себе"
                  required
-                 name="profile-job" minlength="2" maxlength="200">
-          <span class="popup__field-error profileInputJob-error"></span>
+                 name="about" minlength="2" maxlength="200">
+          <span class="popup__field-error about-error"></span>
         </label>
       </fieldset>
       <button type="submit" class="popup__save-btn button" value="Сохранить"
@@ -78,7 +78,7 @@
         <label class="popup__label">
           <input type="url" class="popup__field" id="avatarSource" placeholder="Ссылка на картинку"
                  required
-                 name="avatar-source">
+                 name="avatar">
           <span class="popup__field-error avatarSource-error"></span>
         </label>
       </fieldset>
@@ -98,13 +98,13 @@
       <fieldset class="popup__field-set">
         <label class="popup__label">
           <input type="text" class="popup__field" id="newCardTitle" placeholder="Название" required
-                 name="new-card-title" minlength="2" maxlength="30">
+                 name="name" minlength="2" maxlength="30">
           <span class="popup__field-error newCardTitle-error"></span>
         </label>
         <label class="popup__label">
           <input type="url" class="popup__field" id="newCardSource" placeholder="Ссылка на картинку"
                  required
-                 name="new-card-source">
+                 name="link">
           <span class="popup__field-error newCardSource-error"></span>
         </label>
       </fieldset>

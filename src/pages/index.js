@@ -16,8 +16,6 @@ import {
     avatarForm,
     cardAddBtn,
     avatarEditBtn,
-    inputName,
-    inputJob,
     cardSelector,
     validationConfig,
     apiConfig
@@ -39,11 +37,11 @@ const profile = new UserInfo({
 
 // Profile Popup
 const profilePopup = new PopupWithForm({
-        formSubmit: ({profileInputName, profileInputJob}) => {
-            api.patchProfileInfo({
-                name: profileInputName,
-                about: profileInputJob
-            })
+        formSubmit: (profileInfo) => {
+            return api.patchProfileInfo(profileInfo)
+                .then((res) => {
+                    profile.setUserInfo(res);
+                })
         }
     },
     profilePopupSelector);
@@ -51,11 +49,17 @@ profilePopup.setEventListeners();
 
 // NewCard Popup
 const cardPopup = new PopupWithForm({
-        formSubmit: ({newCardTitle, newCardSource}) => {
-            api.addNewCard({
-                name: newCardTitle,
-                link: newCardSource
-            })
+        formSubmit: (cardInfo) => {
+            return api.addNewCard(cardInfo)
+                .then((card) => {
+                    defaultCardList.addItem({
+                        card: card,
+                        conditions: {
+                            deleteCond: false,
+                            likeCond: false
+                        }
+                    })
+                })
         }
     },
     cardPopupSelector);
@@ -65,7 +69,14 @@ cardPopup.setEventListeners();
 const attentionPopup = new PopupWithAttention({
         formSubmit: (id) => {
             api.deleteCard(id)
-            document.getElementById(id).classList.add('fade_type_out');
+                .then(() => {
+                    attentionPopup.close();
+                    document.getElementById(id).classList.add('fade_type_out');
+                })
+                .catch((err) => {
+                    console.log(`Ошибка: ${err}`);
+                })
+            //
         }
     },
     attentionPopupSelector);
@@ -73,10 +84,11 @@ attentionPopup.setEventListeners();
 
 // Avatar Popup
 const avatarPopup = new PopupWithForm({
-        formSubmit: ({avatarSource}) => {
-            api.editAvatar({
-                url: avatarSource
-            })
+        formSubmit: (avatar) => {
+            return api.editAvatar(avatar)
+                .then((res) => {
+                    profile.setUserInfo(res);
+                })
         }
     },
     avatarPopupSelector);
@@ -89,8 +101,7 @@ imagePopup.setEventListeners();
 // Profile edit btn
 profileEditBtn.addEventListener('click', () => {
     const curProfileInfo = profile.getUserInfo();
-    inputName.value = curProfileInfo.name;
-    inputJob.value = curProfileInfo.job;
+    profilePopup.setInputValues(curProfileInfo);
     profileValidation.enableButton();
     profilePopup.open();
 })
@@ -108,61 +119,55 @@ cardAddBtn.addEventListener('click', () => {
 })
 
 // Cards section
-// TODO Нужен ли тут renderer
-const defaultCardList = new Section(cardListSelector);
+const defaultCardList = new Section({
+    renderer: ({card, conditions}) => {
+        return createCard(card, conditions);
+    }
+}, cardListSelector);
 
 // API
-const api = new Api(apiConfig, {
-    profileUpdater: ({name, about, avatar}) => {
-        profile.setUserInfo({
-            newName: name,
-            newJob: about,
-            newImage: avatar
+const api = new Api(apiConfig);
+Promise.all([api.getInitialProfileInfo(), api.getInitialCards()])
+    .then(([userData, cards]) => {
+        profile.setUserInfo(userData);
+        const newCards = [];
+        cards.forEach((card) => {
+            const conditions = checkCardConditions(card, userData._id)
+            newCards.push({card, conditions});
         })
-    },
-    newCardRenderer: ({_id, name, link, likes}, {deleteCond, likeCond}) => {
-        const card = createCard({
-            id: _id,
-            name: name,
-            link: link,
-            likesCnt: likes.length
-        }, {
-            deleteCond: deleteCond,
-            likeCond: likeCond
-        });
-        defaultCardList.addItem(card);
-    }
-}, {
-    avatarSaveRender: (isLoading) => {
-        avatarPopup.renderSaving(isLoading);
-    },
-    profileSaveRender: (isLoading) => {
-        profilePopup.renderSaving(isLoading);
-    },
-    newCardSaveRender: (isLoading) => {
-        cardPopup.renderSaving(isLoading);
-    }
-});
-api.getBaseContent();
+        defaultCardList.renderItems(newCards)
+    })
+    .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+    })
+
 
 // Валидация форм
 const profileValidation = new FormValidator(validationConfig, profileForm);
-profileValidation.setValidation();
+profileValidation.enableValidation();
 const newCardValidation = new FormValidator(validationConfig, cardForm);
-newCardValidation.setValidation();
+newCardValidation.enableValidation();
 const avatarValidation = new FormValidator(validationConfig, avatarForm);
-avatarValidation.setValidation();
+avatarValidation.enableValidation();
 
 // Функция создания карточки
-const createCard = ({id, name, link, likesCnt}, {deleteCond, likeCond}) => {
-    const newCard = new Card({
-            _id: id,
-            name: name,
-            link: link,
-            likesCnt: likesCnt,
-            deleteCond: deleteCond,
-            likeCond: likeCond
-        }, {
+
+const checkCardConditions = (card, myID) => {
+    let myLike = false
+    card.likes.forEach(user => {
+        if (user._id === myID) {
+            myLike = true
+        }
+    })
+    return {
+        deleteCond: myID !== card.owner._id,
+        likeCond: myLike
+    }
+}
+
+const createCard = (card, conditions) => {
+
+    const newCard = new Card(card, conditions, {
             handleCardClick: (name, link) => {
                 imagePopup.open(name, link);
             },
@@ -170,15 +175,18 @@ const createCard = ({id, name, link, likesCnt}, {deleteCond, likeCond}) => {
                 attentionPopup.open(evt);
             },
             handleLikeClick: (likeState, imgID) => {
-                api.pressLike({
+                console.log(likeState, imgID);
+                return api.pressLike({
                     likeState: likeState,
                     imgID: imgID
-                }, {
-                    updateLikesCnt: (res) => {
-                        newCard.updateLikes({likesCnt: res.likes.length});
-                    }
-                });
-
+                })
+                    .then((res) => {
+                        newCard.updateLikes({likesCnt: res.likes.length})
+                        newCard.pressLike();
+                    })
+                    .catch((err) => {
+                        console.log(`Ошибка: ${err}`);
+                    })
 
             }
         },
